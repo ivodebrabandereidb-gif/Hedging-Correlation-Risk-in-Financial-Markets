@@ -188,3 +188,5 @@ Furthermore, it constructs figures 12 and 13.
 #### Outputs
 - `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
 - `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL
+
+
