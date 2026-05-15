@@ -1,14 +1,15 @@
 #------------------------- General Purpose -------------------------
 # This file is constructed to give insight in the results of the gamma trading strategy 
 # in accordance to what is written in the thesis in Chapter 6.2
-# Furthermore, it constructs figures 12 and 13.
+# Furthermore, it constructs figures 12, 13 and 14, and Tables 4 (data is printed throughout the script) and 5.
 
 #------------------------- !! Important !! -------------------------
-# To obtain the figures laid out in the thesis:
+# To obtain figures 12 and 13 in the thesis:
 # Run this script up to line  using,
-# Maturity = 30 and 90,
+# maturity = 30 and 90,
 # delta = "delta"
 # When both maturities are in memory then run the last lines of the script.
+# Figure 14 and tables 4 and 5 are made in the same process.
 
 library(lubridate)
 library(ggplot2)
@@ -23,9 +24,9 @@ library(patchwork)
 
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 90
+maturity = 30
 #Use this program only for the gamma-hedged analysis, for the vega-hedged analysis
-#we refer the reader to 'Cummulative Gains and Analysis - Vega Strategy.R'.
+#we refer the reader to 'Cumulative Gains and Analysis - Vega Strategy.R'.
 greek_hedge = "gamma"
 #Put equal to 'delta_sticky' when using the sticky delta or 'delta' when using the standard delta.
 delta = "delta"
@@ -56,8 +57,6 @@ df_index <- df_index %>%
 df_index <- df_index %>%
   left_join(df_interest_rate, by = c("quote_date")) %>%
   filter(!is.na(interest_rate))
-
-
 
 mean = mean(df_index$return)
 Excess_return = mean(df_index$return-((1+df_index$interest_rate)^(1/365)-1))
@@ -193,43 +192,9 @@ assign(
 
 print(get(paste0("pl", maturity)))
 
-
-
-#top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(legend.position = "bottom")
-#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-#top_row
-#ggsave(paste0('Figures/Figure12_PNL_cummulative_',greek_hedge,'_',delta,'_30_90.png'), plot=top_row,  width = 6.5,height = 5.25)
-
-
-#loading implied correlations
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd(paste0("../6. Implied correlation per moneyness/Data/",maturity))
-df_implied_cor <-as.data.frame(read.csv2(paste0("Implied correlation per moneyness_M",maturity," - ATM.csv"),sep=";", dec=","))
-df_implied_cor <- df_implied_cor %>% arrange(quote_date)
-df_implied_cor <- df_implied_cor %>% rename(correlation = rho_iv)
-
-#loading realized correlations
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd(paste0("../4. Model-free vs realized correlation/Data/",maturity))
-df_realized_cor <- as.data.frame(read.csv2(paste0("Realized_Correlation_M",maturity,".csv"),sep=";", dec=","))
-df_realized_cor <- df_realized_cor %>% rename(correlation = realized_cor)
-
-#plot 1: P&L of trading strategy: realized vs theoretical
-df_implied_cor$ID = "1"
-df_realized_cor$ID = "2"
-#plot_data <- rbind(df_implied_cor,df_realized_cor)
-#plot_data$quote_date <- as.Date(plot_data$quote_date)
-#plot_data <- plot_data %>% arrange(ID,quote_date)
-
-
-#top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(legend.position = "bottom")
-#top_row
-#ggsave('C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/Data/data results/Implied_vs_realized_correlationv2_30_90.png', plot=top_row,  width = 6.5,height = 5.25)
-
-
-
-# Understanding returns
-
+#-------------------------------
+# Step 5: Understanding returns.
+#-------------------------------
 
 if(delta== "delta")
 {
@@ -269,6 +234,10 @@ if(maturity==90)
   
 }
 
+#-------------------------------
+# Step 6: Settings figure 13.
+#-------------------------------
+
 pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   scale_y_continuous(expand = c(0, 0), breaks = ybreaks, limits = ylimits)+
@@ -294,8 +263,11 @@ assign(
 
 print(get(paste0("pl_capm_", maturity)))
 
+#Regression analysis from Section 6.2: Realized P&L on (theoretical) gamma P&L. (Table 5)
 Re_against_Retheor <-lm(Re ~ Re_theoretical, data = df_CAPM)
 summary(Re_against_Retheor)
+
+
 pl_real_vs_theor_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical*100, y = Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   geom_abline(intercept = Re_against_Retheor$coefficients[1] , slope = Re_against_Retheor$coefficients[2], color = "#DD8A2E", linetype = "21", linewidth = 0.78) +
@@ -323,32 +295,11 @@ assign(
 
 print(get(paste0("pl_real_vs_theor_", maturity)))
 
-#combined_plot <- ((pl_real_vs_theor_30+pl_capm_30)/ (pl_real_vs_theor_90+pl_capm_90)) + plot_annotation(tag_levels = 'a')
+#-------------------------------
+# Step 6: Settings and saving figure 14: vega corrected realized vs index returns
+#-------------------------------
 
-# Display the result
-#combined_plot
-
-#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-#ggsave('Figures/Realmarketdata_analysis_gamma_v2.png', 
-#       plot=combined_plot,
-#       width = 6.5,
-#       height = 5,
-#       units = "in",   # Always specify inches
-#       dpi = 300       # High resolution for printing
-#)
-
-
-
-#is this still used here?
-# Realized vs index returns - vega correction
-
-df_rho_iv <-as.data.frame(read.csv2("Implied correlation per moneyness_30v3 - ATM.csv",sep=";", dec=",")) %>% mutate(quote_date = as.Date(quote_date)) %>% select(quote_date,rho_iv,denumerator_sum,average_iv)
-
-df_CAPM_vega <- df_CAPM %>%
-  left_join(df_rho_iv, by = c("quote_date"))
-  
-#y =-rho_iv*1/252*average_iv^2+(Re-(Re_theoretical_w_vega-Re_theoretical))*2/(Gamma_index*S_I^2)*average_iv^2/denumerator_sum)
-pl_capm_30_vega_corrected <- ggplot(df_CAPM_vega, aes(x = RMe*100,y =100*(Re-(Re_theoretical_w_vega-Re_theoretical)))) +
+pl_capm_vega_corrected_maturity <- ggplot(df_CAPM, aes(x = RMe*100,y =100*(Re-(Re_theoretical_w_vega-Re_theoretical)))) +
   geom_point(alpha = 0.5, color = "#00407A") +
   scale_y_continuous(expand = c(0, 0))+
   labs(
@@ -367,9 +318,15 @@ pl_capm_30_vega_corrected <- ggplot(df_CAPM_vega, aes(x = RMe*100,y =100*(Re-(Re
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
 
+assign(
+  paste0("pl_capm_vega_corrected_", maturity),
+  pl_capm_vega_corrected_maturity
+)
+#Regression analysis from Section 6.2.1: Realized P&L on (theoretical) gamma-vega P&L.
 Re_against_Retheor_vega <- lm(Re ~ Re_theoretical_w_vega, data = df_CAPM_vega)
 summary(Re_against_Retheor_vega)
-pl_real_vs_theor_vega_30 <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*100, y = Re*100)) +
+
+pl_real_vs_theor_vega_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*100, y = Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   geom_abline(intercept = Re_against_Retheor_vega$coefficients[1] , slope = Re_against_Retheor_vega$coefficients[2], color = "#DD8A2E", linetype = "21", linewidth = 0.78) +
   scale_y_continuous(expand = c(0, 0), breaks=seq(-60,20,20), limits =c(-60,20))+
@@ -389,10 +346,20 @@ pl_real_vs_theor_vega_30 <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*100, y
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
 
-pl_30_vega <- pl_real_vs_theor_vega_30+pl_capm_30_vega_corrected
+assign(
+  paste0("pl_real_vs_theor_vega_", maturity),
+  pl_real_vs_theor_vega_maturity
+)
 
-ggsave('C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/Data/data results/realmarket_analysis_gamma_vega_corrected_v2.png', 
-       plot=pl_30_vega,
+pl_vega_maturity <- get(paste0("pl_real_vs_theor_vega_", maturity))+get(paste0("pl_capm_vega_corrected_", maturity))
+
+pl_vega_maturity
+
+#Save Plot for Figure 14.
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd("Figures")
+ggsave(paste0('Figure14_realmarket_analysis_gamma_vega_corrected_',maturity,'.png'), 
+       plot=pl_vega_maturity,
        width = 7,
        height = 3.5,
        units = "in",   # Always specify inches
@@ -403,62 +370,9 @@ CAPM_vega_corrected <- lm(Re-(Re_theoretical_w_vega-Re_theoretical) ~RMe, data =
 summary(CAPM_vega_corrected)
 confint(CAPM_vega_corrected, level = 0.95)
 
-#Untill here i think not used------------------------------
-# testing realized PNL against r1*r2/(s1*s2) - rho_implied, where r1,r2 are realized returns and s1, s2 are EWMA-volatilities
-EWMA_f <- function(S, lambda)
-  {
-    sigma = S #define list
-    sigma[1]=0.2/sqrt(252)
-    
-    n = length(S)
-    
-    R = diff(S)/S[-n]
-    
-    for(i in 2:n)
-    {
-    
-      sigma[i]= sqrt(lambda*sigma[i-1]^2+(1-lambda)*R[i-1]^2)
-    }
-    return(data.frame(returns = c(R,0), sigma = sigma*sqrt(252)))
-  }
-
-
-df_test <- weights %>%
-  filter(security_ID != 102456) %>%
-  group_by(security_ID) %>%
-  arrange(quote_date) %>%
-  reframe(quote_date = quote_date, EWMA_f(close_price, 0.95)) %>%
-  ungroup()
-
-
-df_cor_measure <- weights %>%
-  filter(security_ID != 102456) %>%  
-  left_join(df_implied_cor,by = "quote_date") %>%
-  left_join(df_test, by = c("quote_date","security_ID")) %>%
-  group_by(quote_date) %>%
-  mutate(w = close_price/sum(close_price)) %>%
-  summarize( diff_cor = sum(w*returns)^2-sum((w*returns)^2)-(sum(w*sigma)^2-sum((w*sigma))^2)*first(correlation)/252, .groups="drop") %>%
-  ungroup() 
-  
-
-df_test <- df_PNL %>%
-  left_join(df_cor_measure, by = c("quote_date")) %>%
-  select(quote_date, PNL_realized, diff_cor)
-
-
-ggplot(df_test, aes(x = diff_cor, y = PNL_realized)) +
-  geom_point() +
-  labs(title = "Scatter Plot of Realized PNL vs Correlation Difference",
-       x = "diff_cor",
-       y = "PNL_realized") +
-  theme_minimal()
-
-model <- lm(PNL_realized ~ diff_cor, data = df_test)
-
-# Display the regression results
-summary(model)
-
-#From here both
+#-------------------------------
+# Step 7: Settings and saving figure 12 and 13
+#-------------------------------
 
 top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(legend.position = "bottom")
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))

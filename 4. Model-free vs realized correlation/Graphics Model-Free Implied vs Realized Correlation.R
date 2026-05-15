@@ -112,7 +112,7 @@ assign(
 print(get(paste0("pl", maturity)))
 
 #------------------------- 
-#Constructing the plot from the paper, make sure to have run up to line 112 for both maturities.
+#Constructing the plot from the thesis, make sure to have run up to line 112 for both maturities.
 #Both maturity 30 and 90 should be in memory
 #-------------------------
 

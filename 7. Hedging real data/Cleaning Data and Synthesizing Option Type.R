@@ -8,15 +8,15 @@
 # STEP 2: take linear combinations (coefficient = 0 often) of options in df_TandTp to construct synthetic options with which is delta-hedged
 #         Example (straddles): for a portfolio of a straddle, shares_option = 1 for the ATM call and put option and 0 elsewhere. 
 #         df_TandTP can also be used to define log-contracts
-# STEP 3: 
+# STEP 3: Executing the trade
 
 #------------------------- !! Important !! -------------------------
 # To obtain all necessary data for the following scripts,
 # Run this entire script for the following scenarios:
 # - Maturity = 30 and 90,
 # - greek_hedge = 'gamma' and 'vega',
-# - delta_type = 'delta' and 'delta_sticky',
-# A total of 8 scenarios should be ran.
+# - delta_type = 'delta' and 'delta_sticky' (choose delta_sticky only in combination with greek_hedge = gamma),
+# A total of 6 scenarios should be ran.
 
 library(lubridate)
 library(ggplot2)
@@ -32,11 +32,11 @@ library(tidyverse)
 Option_type = "Straddle"
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 30
+maturity = 90
 #choose hedging strategy: gamma or vega, with vega the trade at the end of the thesis using vega-hedging
-greek_hedge = "gamma" 
+greek_hedge = "vega" 
 #To use normal delta fill in 'delta', for a sticky delta use 'delta_sticky'
-deltatype = 'delta_sticky'
+deltatype = 'delta'
 months = c("1","2","3","4","5","6","7","8","9","10","11","12")
 years = c("2008","2009","2010")
 
@@ -46,7 +46,7 @@ years = c("2008","2009","2010")
 
 #the following program loads datasets: data, weights, zcb
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd("../Data loader")
+setwd("../3. Data loader")
 source("Loading data.R")
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
@@ -57,9 +57,9 @@ df_trading_days <- data %>% distinct(quote_date) %>% mutate(next_quote_date = le
 data_cleaned = data[data["open_interest"]>0 & data["best_bid"]>0,]
 data_cleaned$midquote = (data_cleaned$best_bid+data_cleaned$best_offer)/2
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------
 #Step 0.1: create table with interpolated interest rate per quote_date with given maturity
-#-----------------------------------------------------------------------------------------
+#-------------------------------
 
 #Important note: we use an extrapolated 1-day interest rate as a proxy for the interest received on a risk free bank account
 df_interest_rate <- zcb %>%
@@ -69,9 +69,9 @@ df_interest_rate <- zcb %>%
     .groups = "drop"
   )
 
-#----------------------------------------------------------------------------------------
+#-------------------------------
 #Step 0.2: Determining forward prices: using clean data set with ATM call and put options
-#----------------------------------------------------------------------------------------
+#-------------------------------
 #To check
 #Step 0.2.1: Define helper functions to extract the European Call (EC) 
 #and European Put (EP) option prices.
@@ -106,9 +106,9 @@ df_forward <- df_forward %>%
   ungroup() %>%
   select(quote_date,security_ID,expiration,forward_price)
 
-#-------------------------------------------------------------------------------------
+#-------------------------------
 #Step 1: Create table containing prices and Greeks at T and T+1 for all liquid options
-#-------------------------------------------------------------------------------------
+#-------------------------------
 
 #T= quote_date
 #T+1= next trading date
@@ -234,14 +234,14 @@ synthetic_option_f <- function(security_ID,delta, strike,Kmin,Kmax,option_type)
   composition = case_when(
     option_type == "straddle" ~ as.numeric((strike == Kmin & delta<0) | (strike == Kmax & delta>0))
     )
-  return(composition) #converts boolean to 1 and 0 values
+  return(composition) 
 }
 
 # We also sum implied volatilities, this usually makes no sense. However, the sum: z(IV_call)+z(IV_put) is approximately z(IV_call+IV_put),
 # with z = \partial \sigma_I/\partial \sigma_i
 
-#source("C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/R programmas/Hedging real data/Realized correlation lagged.R")
-#Loaing ATM implied correlations used for vega trade
+
+#Loading ATM implied correlations used for vega trade
 df_implied_cor <-as.data.frame(read.csv2(paste0("../6. Implied correlation per moneyness/Data/",maturity,"/Implied correlation per moneyness_M",maturity," - ATM.csv"),sep=";", dec=","))
 df_implied_cor <- df_implied_cor %>% mutate(quote_date = as.Date(quote_date))
 df_implied_cor <- df_implied_cor %>% rename(rho_estimate = rho_iv)
@@ -262,8 +262,6 @@ df_main_collapsed <- df_main %>%
               .groups = "drop") %>%
   left_join(weights %>% distinct(quote_date,weights), by = "quote_date") %>%
   left_join(df_implied_cor, by = "quote_date") %>%
-  #left_join(df_rho_estimate, by = c("quote_date")) %>%
-  #ordering columns
   select(quote_date,dt, security_ID,interest_rate, weight_DOJ= weights, delta_sticky, delta, gamma,vega, rho_estimate, IV_weighted, expiration, F_T, S_T, O_T, F_Tp, S_Tp, O_Tp, PNL_theoretical,PNL_theoretical_w_vega,PNL_theoretical_w_vega_and_sticky_delta)
 
 #------------------------------
@@ -309,14 +307,14 @@ ggplot(df_DQ, aes(x = quote_date, y = nbr_securities)) +
 #shares_stock
 #shares_bank
 
-#for the vega hedge, we need an estimate of future correlations. We use the lagged realized correlation.
+#for the vega hedge, we need an estimate of future correlations. We use the ATM IC.
 
 portfolio_f <- function(greek_hedge, security_ID, gamma,delta,vega, O,S,weight_DOJ,IV,rho_estimate){
   n = length(security_ID)
   index = which(security_ID == 102456)
   alpha_index = -sign(gamma[index])/O[index]
   
-  #We compute the vector signifying the shares in each option: shares_option
+  #We compute the vector signifying the shares in each option: shares_option.
   if(greek_hedge == "gamma")
   {
     shares_option= -alpha_index*first(weight_DOJ)^2*gamma[index]/gamma
@@ -331,7 +329,7 @@ portfolio_f <- function(greek_hedge, security_ID, gamma,delta,vega, O,S,weight_D
     shares_option =  -alpha_index*partial_OI_partial_sigma_i/vega
     shares_option[index] = alpha_index
   }
-  #We delta hedge all stocks by hedging the index option with the index itself
+  #We delta hedge all stocks by hedging the index option with the index itself.
   shares_stock = -shares_option*delta
   
   shares_bank = -(sum(shares_option*O)+sum(shares_stock*S))
@@ -339,14 +337,13 @@ portfolio_f <- function(greek_hedge, security_ID, gamma,delta,vega, O,S,weight_D
 }
 
 
-# Change here delta by delta_sticky if necessary!
 df_dispersion_portfolio <- df_main_collapsed %>%
   group_by(quote_date) %>%
   mutate(portfolio_f(greek_hedge,security_ID,gamma,get(deltatype),vega,O_T,S_T,weight_DOJ,IV_weighted,rho_estimate)) %>%
   ungroup()
 
 #------------------------------------------
-# Step 4: Computing P&L of hedging strategy
+# Step 4: Computing P&L of hedging strategy.
 #------------------------------------------
 
 df_PNL <- df_dispersion_portfolio %>%
@@ -361,6 +358,10 @@ df_PNL <- df_dispersion_portfolio %>%
             R_I = (S_Tp[security_ID == 102456]-S_T[security_ID == 102456])/S_T[security_ID == 102456],
             O_I = O_T[security_ID == 102456],
             .groups = "drop")
+
+#------------------------------------------
+# EXTRA: Visualization P&L.
+#------------------------------------------
 
 ggplot(df_PNL, aes(x = quote_date)) +
   # Realized P&L Line
@@ -390,14 +391,18 @@ ggplot(df_PNL, aes(x = quote_date)) +
   scale_color_manual(values = c("Realized" = "steelblue", "Theoretical" = "darkorange")) +
   theme_minimal()
 
+#------------------------------------------
+# Step 5: Saving the P&L data.
+#------------------------------------------
+
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(paste0("Data/",maturity))
 output_name <- paste0("Option_dispersion_trade_",deltatype,"_",greek_hedge,"_",maturity,".csv")
 write.table(df_PNL, output_name, row.names = FALSE,sep=";",dec=",")
 
-#--------------------
+#------------------------------------------
 #Insights in strategy
-#--------------------
+#------------------------------------------
 
 # measuring Gamma_I/O_I
 df_Gamma_over_O <- df_main_collapsed %>%
@@ -442,7 +447,7 @@ df_long <- df_values_invested %>%
     values_to = "value"
   )
 
-# 2. Create the ggplot
+# Create plot portfolio value composition over time
 ggplot(df_long, aes(x = quote_date, y = value, fill = asset_class)) +
   geom_area(alpha = 0.8, size = 0.5, colour = "white") +
   scale_fill_brewer(palette = "Set2", labels = c("Cash", "Index", "Options", "Stocks")) +
@@ -464,8 +469,8 @@ cat("Individual stocks:", mean(df_values_invested$stock_worth)*100,"\n",
 model <- lm(PNL_realized ~ PNL_theoretical, data=df_PNL)
 summary(model)
 ggplot(df_PNL, aes(x = PNL_theoretical, y = PNL_realized)) +
-  geom_point(alpha = 0.5, color = "steelblue") + # alpha adds transparency to see density
-  geom_smooth(method = "lm", color = "red", se = TRUE) + # Adds the regression line
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_smooth(method = "lm", color = "red", se = TRUE) +
   labs(
     title = "CAPM: Strategy Excess Returns vs. Market Excess Returns",
     x = "Theoretical Excess Return (RMe)",
@@ -473,8 +478,10 @@ ggplot(df_PNL, aes(x = PNL_theoretical, y = PNL_realized)) +
   ) +
   theme_minimal()
 
+#------------------------------------------
+# Linear regression of the sticky-delta rule in Section 6.2.1
+#------------------------------------------
 
-#Testing sticky delta regime
 df_sticky_delta_regime <- df_main %>%
   mutate(composition = synthetic_option_f(security_ID,delta,strike_price,Kmin,Kmax,"straddle")) %>%
   filter(composition == 1) %>%

@@ -164,7 +164,7 @@ This file is intended to be sourced by other scripts and is not executed standal
 #### Purpose
 
 This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
-Furthermore, it constructs figures 12 and 13.
+Furthermore, it constructs figures 12, 13 and 14, and Table 4 (data is printed throughout the script).
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
