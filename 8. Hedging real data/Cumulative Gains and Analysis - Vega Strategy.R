@@ -22,7 +22,7 @@ library(tidyr)
 
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 30
+maturity = 90
 #Use this program only for the vega-hedged analysis, for the gamma-hedged analysis
 #Put equal to 'delta'.
 delta = "delta"
@@ -209,7 +209,7 @@ combined_plot
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
-ggsave('C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/Data/data results/Realmarketdata_analysis_vega.png', 
+ggsave('Figure15_Realmarketdata_analysis_vega.png', 
        plot=combined_plot,
        width = 6.5,
        height = 5,
@@ -219,18 +219,18 @@ ggsave('C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/Data/data 
 
 #------------------------- 
 # EXTRA: Statistical test: relation between sign of returns and correlation gap
-# First, Box-Ljung test to test for dependence
+# First, Box-Ljung test to test for dependence 
 #-------------------------
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd("../5. Model-free")
-setwd(paste0("C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/Data/data results/",maturity))
+setwd(paste0("../5. Model-free vs realized correlation/Data/", maturity))
+
 
 # Loading implied correlations
-df_implied_cor <- as.data.frame(read.csv2(paste0("Model_Free_Implied_Correlationv2.csv"),sep=";", dec=","))
+df_implied_cor <- as.data.frame(read.csv2(paste0("Model_Free_Implied_Correlation_M", maturity, ".csv"),sep=";", dec=","))
 df_implied_cor <- df_implied_cor %>% mutate(quote_date =as.Date(quote_date), correlation = implied_corr) %>% arrange(quote_date)  %>% select(quote_date, correlation)
 
 #loading realized correlations
-df_realized_cor <- as.data.frame(read.csv2(paste0("Realized_Correlation_",maturity,".csv"),sep=";", dec=","))
+df_realized_cor <- as.data.frame(read.csv2(paste0("Realized_Correlation_M",maturity,".csv"),sep=";", dec=","))
 df_realized_cor <- df_realized_cor  %>% mutate(quote_date =as.Date(quote_date)) %>% rename(correlation = realized_cor)
 
 #Correlation gap
@@ -246,6 +246,10 @@ df_matches <- df_PNL %>%
 matches = as.numeric(df_matches$matches)
 Box.test(as.numeric(matches), lag = 10, type = "Ljung-Box")
 
+#------------------------- 
+# EXTRA: Statistical test: relation between sign of returns and correlation gap
+# Second, Binomial test to test whether the sign of the realized P&L matches the sign of the risk neutral drift of correlation.
+#-------------------------
 
 binom.test(sum(matches), length(matches), p = 0.5, alternative = "greater")
 

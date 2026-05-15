@@ -24,7 +24,7 @@ library(patchwork)
 
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 30
+maturity = 90
 #Use this program only for the gamma-hedged analysis, for the vega-hedged analysis
 #we refer the reader to 'Cumulative Gains and Analysis - Vega Strategy.R'.
 greek_hedge = "gamma"
@@ -323,7 +323,7 @@ assign(
   pl_capm_vega_corrected_maturity
 )
 #Regression analysis from Section 6.2.1: Realized P&L on (theoretical) gamma-vega P&L.
-Re_against_Retheor_vega <- lm(Re ~ Re_theoretical_w_vega, data = df_CAPM_vega)
+Re_against_Retheor_vega <- lm(Re ~ Re_theoretical_w_vega, data = df_CAPM)
 summary(Re_against_Retheor_vega)
 
 pl_real_vs_theor_vega_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*100, y = Re*100)) +
@@ -366,7 +366,7 @@ ggsave(paste0('Figure14_realmarket_analysis_gamma_vega_corrected_',maturity,'.pn
        dpi = 300       # High resolution for printing
 )
 
-CAPM_vega_corrected <- lm(Re-(Re_theoretical_w_vega-Re_theoretical) ~RMe, data = df_CAPM_vega)
+CAPM_vega_corrected <- lm(Re-(Re_theoretical_w_vega-Re_theoretical) ~RMe, data = df_CAPM)
 summary(CAPM_vega_corrected)
 confint(CAPM_vega_corrected, level = 0.95)
 

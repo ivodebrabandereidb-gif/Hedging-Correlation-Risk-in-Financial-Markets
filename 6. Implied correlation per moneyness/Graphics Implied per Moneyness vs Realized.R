@@ -34,7 +34,7 @@ df_implied_cor <- df_implied_cor %>% arrange(quote_date)
 df_implied_cor <- df_implied_cor %>% rename(correlation = rho_iv) %>% select(quote_date, correlation)
 
 #loading realized correlations
-df_realized_cor <- as.data.frame(read.csv2(paste0("../../../4. Model-free vs realized correlation/Data/",maturity,"/Realized_Correlation_M",maturity,".csv"),sep=";", dec=","))
+df_realized_cor <- as.data.frame(read.csv2(paste0("../../../5. Model-free vs realized correlation/Data/",maturity,"/Realized_Correlation_M",maturity,".csv"),sep=";", dec=","))
 df_realized_cor <- df_realized_cor %>% rename(correlation = realized_cor)
 
 #------------------------- 

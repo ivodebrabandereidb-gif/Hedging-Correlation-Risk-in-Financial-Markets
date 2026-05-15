@@ -1,14 +1,3 @@
-#library(lubridate)
-#library(ggplot2)
-#library(dplyr)
-#library(tidyr)
-
-#maturity = 30
-#months = c("1","2","3","4","5","6","7","8","9","10","11","12")
-#years = c("2008","2009","2010")
-
-#source("C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/R programmas/Hedging real data/Loading data.R")
-
 
 #OTM-options
 data_cleaned_sticky_delta = data[data["open_interest"]>0 & data["best_bid"]>0 & (data["delta"]< 0.5 & data["delta"]>-0.5),]

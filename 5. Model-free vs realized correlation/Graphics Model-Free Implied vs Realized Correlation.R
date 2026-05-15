@@ -20,7 +20,7 @@ library(patchwork)
 #------------------------- 
 #Input: Change maturity between 30 and 90 days to obtain the results from the paper.
 #-------------------------
-maturity = 90
+maturity = 30
 
 #------------------------- 
 #Data Loader: Load the calculated implied and realized correlations, 
