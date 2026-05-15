@@ -23,8 +23,21 @@ This file is intended to be sourced by other scripts and is not executed standal
 - `zcb`
 - `weights`
 
+### 3. '4. Correlation risk in portfolio management / Value-at-Risk and Expected Shortfall Calculation.R'
 
-### 3. '4. Model-free vs realized correlation / Realized Correlation.R'
+#### Purpose
+
+This file is constructed to give insight in the results explained in section 1.2 of the thesis. 
+Furthermore, it constructs figure 2.
+
+#### Inputs
+- /
+
+#### Outputs
+- `Fig2_VaR_ES_Portfolios.png`
+
+
+### 4. '5. Model-free vs realized correlation / Realized Correlation.R'
 
 #### Purpose
 
@@ -37,7 +50,7 @@ This file computes the realized correlation (RC) as is explained in section 2.3.
 - `Realized_Correlation_M<Mat>.csv`
 with `<Mat>` depicting the maturity specified.
 
-### 4. '4. Model-free vs realized correlation / Model-Free Implied Correlation.R'
+### 5. '5. Model-free vs realized correlation / Model-Free Implied Correlation.R'
 
 #### Purpose
 
@@ -51,7 +64,7 @@ This file computes the model-free implied correlation (MFIC) as is shown in sect
 - `INTERMEZZO_heatmap_2010_12_M<Mat>.png`
 with `<Mat>` depicting the maturity specified.
 
-### 5. '4. Model-free vs realized correlation / Graphics Model-Free Implied vs Realized Correlation.R'
+### 6. '5. Model-free vs realized correlation / Graphics Model-Free Implied vs Realized Correlation.R'
 
 #### Purpose
 
@@ -64,7 +77,7 @@ This file constructs figure 5 from the thesis.
 #### Outputs
 - `Figure5_ModelFree_Implied_vs_Realized_correlation.png`
 
-### 6. '5. Implied correlation per moneyness / COR3M.R'
+### 7. '6. Implied correlation per moneyness / COR3M.R'
 
 #### Purpose
 
@@ -76,7 +89,7 @@ This file constructs figure 3 from the thesis.
 #### Outputs
 - `COR3M.png`
 
-### 7. '5. Implied correlation per moneyness / Implied Correlation per Moneyness.R'
+### 8. '6. Implied correlation per moneyness / Implied Correlation per Moneyness.R'
 
 #### Purpose
 
@@ -89,7 +102,7 @@ This file computes the implied correlation over moneyness levels to support sect
 - `Figure8_Implied_correlations_vs_moneyness_and_time_M<Mat>.png`
 - `Implied correlation per moneyness_M<Mat> - ATM.csv`
 
-### 8. '5. Implied correlation per moneyness / Graphics Implied per Moneyness vs Realized.R'
+### 9. '6. Implied correlation per moneyness / Graphics Implied per Moneyness vs Realized.R'
 
 #### Purpose
 
@@ -102,7 +115,7 @@ This file constructs figure 6 from the thesis.
 #### Outputs
 - `Figure6_ATM_Implied_vs_realized_correlation_30_90`
 
-### 9. '5. Implied correlation per moneyness / Graphics Implied Correlation per Moneyness vs COR3M.R'
+### 10. '6. Implied correlation per moneyness / Graphics Implied Correlation per Moneyness vs COR3M.R'
 
 #### Purpose
 
@@ -115,7 +128,7 @@ This file constructs figure 7 from the thesis.
 #### Outputs
 - `Figure7_ImpliedATM_vs_COR3M_M<Mat>.png`
 
-### 10. '6. Simulations / Simulations - Pworld as Black Scholes.R'
+### 11. '6. Simulations / Simulations - Pworld as Black Scholes.R'
 
 #### Purpose
 
@@ -129,7 +142,7 @@ This file supports the analysis from Chapter 5 in the thesis. .
 - `Figure10_log2log10straddle2straddle10_scatter.png`
 - `Figure11_Simulations_Analysis.png`
 
-### 11. '7. Hedging real data / implied_volatility_slope_sticky_delta.R'
+### 12. '8. Hedging real data / implied_volatility_slope_sticky_delta.R'
 
 #### Purpose
 
@@ -145,7 +158,7 @@ This file is intended to be sourced by other scripts and is not executed standal
 - `Figure10_log2log10straddle2straddle10_scatter.png`
 - `Figure11_Simulations_Analysis.png`
 
-### 12. '7. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
+### 13. '8. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
 
 #### Purpose
 
@@ -159,7 +172,7 @@ This file is intended to be sourced by other scripts and is not executed standal
 #### Outputs
 - `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>.csv`
 
-### 13. '7. Hedging real data / Cummulative Gains and Analysis - Gamma Strategy.R'
+### 14. '8. Hedging real data / Cummulative Gains and Analysis - Gamma Strategy.R'
 
 #### Purpose
 
@@ -175,7 +188,7 @@ Furthermore, it constructs figures 12, 13 and 14, and Table 4 (data is printed t
 - `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
 - `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL`
 
-### 11. '7. Hedging real data / Cummulative Gains and Analysis - Vega Strategy.R'
+### 15. '8. Hedging real data / Cummulative Gains and Analysis - Vega Strategy.R'
 
 #### Purpose
 

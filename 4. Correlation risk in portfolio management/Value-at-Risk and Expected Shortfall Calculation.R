@@ -1,3 +1,7 @@
+#------------------------- General Purpose -------------------------
+# This file is constructed to give insight in the results explained in section 1.2 of the thesis. 
+# Furthermore, it constructs figure 2. The exact parameter settings to get to the figures are explained in the thesis.
+
 library(MASS)
 library(ggplot2)
 library(dplyr)
@@ -5,8 +9,11 @@ library(tidyr)
 library(patchwork)
 library(scales)
 
-#Varaibles
-#stocks
+#-------------------------------
+#Input variables
+#-------------------------------
+
+#Variables concerning the stocks
 S_1 = 20
 S_2 = 30
 mu_1 = 0.05
@@ -18,11 +25,11 @@ sigma_2 = 0.25
 #sigma_1 = 0.4
 #sigma_2 = 0.35
 
-#between stocks
+#Variables between stocks
 #rho = 0.4
 rho_values <- seq(-0.99, 0.99, by = 0.01)
 
-#option
+#Variables concerning the options
 strike = S_1 + S_2
 put_premium = 7
 #put_premium = 0
@@ -31,12 +38,16 @@ WOstrike = S_1
 WOput_premium = 4.5
 #WOput_premium = 0
 
-#VaR
+#Variables concerning the VaR
 alpha = 0.05
 
-#simulation settings
+#Variables regarding simulation settings
 n = 100000
 T = 1
+
+#-------------------------------
+#Initializing
+#-------------------------------
 
 VaR_1 <- numeric(length(rho_values))
 VaR_2 <- numeric(length(rho_values))
@@ -47,7 +58,10 @@ ES_2 <- numeric(length(rho_values))
 ES_3 <- numeric(length(rho_values))
 
 
-# ======================option 1 =========================================
+#-------------------------------
+#Simulation and calculation loss, value-at-risk and expected shortfall.
+#-------------------------------
+
 set.seed(123)
 
 Z <- matrix(rnorm(n * 2), ncol = 2)
@@ -60,7 +74,7 @@ for (i in seq_along(rho_values)) {
                 rho, 1), nrow = 2, byrow = TRUE)
   
   # Cholesky factor
-  L <- t(chol(R))   # lower triangular
+  L <- t(chol(R))   
   X <- Z %*% t(L)
   
   T_year_return <- data.frame(
@@ -78,18 +92,6 @@ for (i in seq_along(rho_values)) {
                               T_year_return$Stock_2)
   T_year_return$worst_put <- pmax(WOstrike - T_year_return$worst, 0) + T_year_return$sum_col
   
-  #T_year_return$sum_col <- T_year_return$sum_col / (S_1 + S_2)
-  #T_year_return$hedged <- T_year_return$hedged / (S_1 + S_2 + put_premium)
-  #T_year_return$hedgedWO <- T_year_return$worst_put / (S_1 + S_2 + WOput_premium) 
-  
-  #T_year_return$sum_col <- T_year_return$sum_col - (S_1 + S_2)
-  #T_year_return$hedged <- T_year_return$hedged - (S_1 + S_2 + put_premium)
-  #T_year_return$hedgedWO <- T_year_return$worst_put - (S_1 + S_2 + WOput_premium)
-  
-  #loss_unhedged <- 1 - T_year_return$sum_col
-  #loss_hedged   <- 1 - T_year_return$hedged
-  #loss_WOhedged   <- 1 - T_year_return$hedgedWO
-  
   loss_unhedged <- (S_1 + S_2) - T_year_return$sum_col
   loss_hedged   <- (S_1 + S_2 + put_premium) - T_year_return$hedged
   loss_WOhedged   <- (S_1 + S_2 + WOput_premium) - T_year_return$worst_put 
@@ -105,61 +107,9 @@ for (i in seq_along(rho_values)) {
   
 }
 
-# ======================option 2 (not used)=========================================
-
-set.seed(123)
-
-
-
-#simulation from a multivariate normal distribution 
-for (i in seq_along(rho_values)) {
-  rho <- rho_values[i]
-  
-  cov = rho * sigma_1 * sigma_2
-  Sigma <- matrix(c(sigma_1^2, cov, cov, sigma_2^2),2,2)
-  
-  
-  simulated_results <- mvrnorm(n = n, mu = c(0,0), Sigma = Sigma)
-  head(simulated_results)
-  simulated_results <- as.data.frame(simulated_results)
-  names(simulated_results) <- c("Stock_1", "Stock_2")
-  head(simulated_results)
-  
-  T_year_return <- data.frame(
-    Stock_1 = numeric(n),
-    Stock_2 = numeric(n)
-  )
-  
-  
-  T_year_return$Stock_1 <- exp((mu_1-sigma_1^2/2) * T + simulated_results$Stock_1 * sqrt(T)) * S_1
-  T_year_return$Stock_2 <- exp((mu_2-sigma_2^2/2) * T + simulated_results$Stock_2 * sqrt(T)) * S_2 
-  
-  T_year_return$sum_col <- T_year_return$Stock_1 + T_year_return$Stock_2
-  T_year_return$hedged <- pmax(strike - T_year_return$sum_col, 0) + T_year_return$sum_col
-  T_year_return$worst <- pmin(T_year_return$Stock_1,
-                              T_year_return$Stock_2)
-  T_year_return$worst_put <- pmax(WOstrike - T_year_return$worst, 0) + T_year_return$sum_col
-  
-  T_year_return$sum_col <- T_year_return$sum_col / (S_1 + S_2)
-  T_year_return$hedged <- T_year_return$hedged / (S_1 + S_2 + put_premium)
-  T_year_return$hedgedWO <- T_year_return$worst_put / (S_1 + S_2 + WOput_premium) 
-  
-  loss_unhedged <- 1 - T_year_return$sum_col
-  loss_hedged   <- 1 - T_year_return$hedged
-  loss_WOhedged   <- 1 - T_year_return$hedgedWO
-  
-  VaR_1[i] <- quantile(loss_unhedged, 1 - alpha)
-  VaR_2[i] <- quantile(loss_hedged, 1 - alpha)
-  VaR_3[i] <- quantile(loss_WOhedged, 1 - alpha)
-  
-  ES_1[i] <- mean(loss_unhedged[loss_unhedged >= quantile(loss_unhedged, 1 - alpha)])
-  ES_2[i] <- mean(loss_hedged[loss_hedged >= quantile(loss_hedged, 1 - alpha)])
-  ES_3[i] <- mean(loss_WOhedged[loss_WOhedged >= quantile(loss_WOhedged, 1 - alpha)])
-  
-}
-
-#============================both options========================================
-
+#-------------------------------
+#Putting results together.
+#-------------------------------
 
 results_df <- data.frame(
   rho = rho_values,
@@ -203,6 +153,10 @@ plot_data_es <- results_ES_df %>%
                 "ES_3" = "Hedged by worst-off put option"
     )
   )
+
+#-------------------------------
+#Figure settings and plotting.
+#-------------------------------
 
 # Common y-axis limits
 y_min <- min(c(plot_data_var$Value, plot_data_es$Value,0), na.rm = TRUE)
@@ -301,7 +255,7 @@ pl_var_ES <- ggplot(
   )
 
 # Combine plots
-rainbows <- pl_var + pl_var_ES +
+combined_plot <- pl_var + pl_var_ES +
   plot_layout(guides = "collect") +
   plot_annotation(tag_levels = "a") &
   theme(
@@ -312,12 +266,18 @@ rainbows <- pl_var + pl_var_ES +
 
 
 # Display
-rainbows
+combined_plot
 
+#-------------------------------
+#Saving figure.
+#-------------------------------
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd("Figures")
 # Save
 ggsave(
-  "C:/Users/ivode/OneDrive - KU Leuven/Mafi 2/Thesis niet gedeeld/rainbow_options.png",
-  plot = rainbows,
+  "Fig2_VaR_ES_Portfolios.png",
+  plot = combined_plot,
   width = 8.5,
   height = 4.5,
   units = "in",
