@@ -1,15 +1,47 @@
+#------------------------- General Purpose -------------------------
+# This file is constructed to give insight in the results of the gamma trading strategy 
+# in accordance to what is written in the thesis in Chapter 6.2
+# Furthermore, it constructs figures 12 and 13.
+
+#------------------------- !! Important !! -------------------------
+# To obtain the figures laid out in the thesis:
+# Run this script up to line  using,
+# Maturity = 30 and 90,
+# delta = "delta"
+# When both maturities are in memory then run the last lines of the script.
+
 library(lubridate)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 #detach("package:MASS", unload = TRUE)
-maturity = 90
-greek_hedge = "vega"
-delta = "sticky"
 
+#-------------------------------
+#Input
+#-------------------------------
+
+#To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
+#We define maturity to target options with roughly the same maturity
+maturity = 90
+#Use this program only for the vega-hedged analysis, for the gamma-hedged analysis
+#we refer the reader to 'Cummulative Gains and Analysis - Gamma Strategy.R'.
+greek_hedge = "vega"
+#Put equal to 'delta_sticky' when using the sticky delta or 'delta' when using the standard delta.
+delta = "sticky"
 months = c("1","2","3","4","5","6","7","8","9","10","11","12")
 years = c("2008","2009","2010")
-#source("C:/Users/bramv/Documents/Universiteit/2025-2026/Master thesis/R programmas/Hedging real data/Loading data.R")
+
+#-------------------------------
+# Step 0: loading/preparing data
+#-------------------------------
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd("../3. Data loader")
+source("Loading Data.R")
+
+#-------------------------------
+# Step 1: Summary statistics for investment in DJIA index
+#-------------------------------
 
 df_interest_rate <- zcb %>%
   group_by(quote_date) %>%

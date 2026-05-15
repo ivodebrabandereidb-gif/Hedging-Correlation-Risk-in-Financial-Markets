@@ -145,7 +145,7 @@ This file is intended to be sourced by other scripts and is not executed standal
 - `Figure10_log2log10straddle2straddle10_scatter.png`
 - `Figure11_Simulations_Analysis.png`
 
-### 11. '7. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
+### 12. '7. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
 
 #### Purpose
 
@@ -154,21 +154,37 @@ This file is intended to be sourced by other scripts and is not executed standal
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
-- The sticky deltas computed by `implied_volatility_slope_sticky_delta`.
+- The sticky deltas computed by `implied_volatility_slope_sticky_delta.R`.
 
 #### Outputs
-- `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>`
+- `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>.csv`
 
-### 11. '7. Hedging real data / Cummulative Gains and Analysis - Gamma Strategy.R'
+### 13. '7. Hedging real data / Cummulative Gains and Analysis - Gamma Strategy.R'
 
 #### Purpose
 
-Constructs the sticky-delta implied volatility slope measure by cleaning the option dataset, removing duplicate option observations, and computing implied volatility slopes across strike prices.
-This file is intended to be sourced by other scripts and is not executed standalone.
+This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
+Furthermore, it constructs figures 12 and 13.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
 - `Implied correlation per moneyness_M<Mat> - ATM.csv` from `Implied Correlation per Moneyness.R`
+- `Realized_Correlation_M<Mat>.csv` from `Realized Correlation.R`
 
 #### Outputs
-- `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>`
+- `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
+- `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL`
+
+### 11. '7. Hedging real data / Cummulative Gains and Analysis - Vega Strategy.R'
+
+#### Purpose
+
+This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
+Furthermore, it constructs figures 12 and 13.
+
+#### Inputs
+- The option data loaded using the `Loading Data.R`.
+
+#### Outputs
+- `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
+- `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL

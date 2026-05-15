@@ -1,13 +1,14 @@
 #------------------------- General Purpose -------------------------
-# computing the P&L of a delta-hedging strategy
+# This file is constructed to give insight in the results of the gamma trading strategy 
+# in accordance to what is written in the thesis in Chapter 6.2
+# Furthermore, it constructs figures 12 and 13.
 
 #------------------------- !! Important !! -------------------------
-# To obtain all necessary data for the following scripts,
-# Run this entire script for the following scenarios:
-# - Maturity = 30 and 90,
-# - greek_hedge = 'gamma' and 'vega',
-# - delta_type = 'delta' and 'delta_sticky',
-# A total of 8 scenarios should be ran.
+# To obtain the figures laid out in the thesis:
+# Run this script up to line  using,
+# Maturity = 30 and 90,
+# delta = "delta"
+# When both maturities are in memory then run the last lines of the script.
 
 library(lubridate)
 library(ggplot2)
@@ -22,7 +23,7 @@ library(patchwork)
 
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 30
+maturity = 90
 #Use this program only for the gamma-hedged analysis, for the vega-hedged analysis
 #we refer the reader to 'Cummulative Gains and Analysis - Vega Strategy.R'.
 greek_hedge = "gamma"
@@ -209,7 +210,7 @@ df_implied_cor <- df_implied_cor %>% rename(correlation = rho_iv)
 
 #loading realized correlations
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd(paste0("../Model-free vs realized correlation/Data/",maturity))
+setwd(paste0("../4. Model-free vs realized correlation/Data/",maturity))
 df_realized_cor <- as.data.frame(read.csv2(paste0("Realized_Correlation_M",maturity,".csv"),sep=";", dec=","))
 df_realized_cor <- df_realized_cor %>% rename(correlation = realized_cor)
 
@@ -470,7 +471,7 @@ combined_plot <- ((pl_real_vs_theor_30+pl_capm_30)/ (pl_real_vs_theor_90+pl_capm
 # Display the result
 combined_plot
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-ggsave('Figures/Figure13_Scatter_Realized_daily_vs_gamma_PL.png', 
+ggsave(paste0('Figures/Figure13_Scatter_Realized_daily_vs_',greek_hedge,'_',delta,'_PL.png'), 
        plot=combined_plot,
        width = 6.5,
        height = 5,
