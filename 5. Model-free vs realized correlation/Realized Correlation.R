@@ -1,6 +1,6 @@
 #------------------------- General Purpose -------------------------
 # This file computes the realized correlation (RC) as is explained in 
-# section 2.3.1 of the thesis.
+# section 2.3.1 of the thesis using the implementation of Section 3.3.1.
 # To obtain the output necessary for other files run this script twice,
 # Using
 #   maturity = 30 and
@@ -13,9 +13,9 @@ library(tidyverse)
 
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #-------------------------
-maturity = 90
+maturity = 30
 
 
 #------------------------- 
@@ -66,6 +66,8 @@ df_returns_joined <- returns %>%
   filter(count == max(count)) %>%
   ungroup() %>%
   select(quote_date = quote_date.a, security_ID, w = w.a, return = return.b, s = quote_date.b )
+
+# By leaving out stocks that are removed from the DJIA, the weights might not sum up to one. However, we need not to rebalance them as the scalar multiple is divided out in the ultimate result.
 
 #------------------------- 
 #Step 3: Calculate the realized covariances.

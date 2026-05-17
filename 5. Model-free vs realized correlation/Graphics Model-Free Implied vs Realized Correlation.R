@@ -18,9 +18,9 @@ library(patchwork)
 
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #-------------------------
-maturity = 30
+maturity = 90
 
 #------------------------- 
 #Data Loader: Load the calculated implied and realized correlations, 
@@ -72,7 +72,7 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   ) +
   scale_color_manual(
     values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-    labels = c("1" = "Implied Correlation", "2" = "Realized Correlation")
+    labels = c("1" = "Model-free implied correlation", "2" = "Realized correlation")
   )+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -86,17 +86,17 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   annotate("text", x = as.Date("2010-09-01"), y = 1.08, label = paste0(maturity, "-day window"))+
   scale_linetype_manual(
     values = c("1" = "solid", "2" = "21"),
-    labels = c("1" = "Implied Correlation", "2" = "Realized Correlation")
+    labels = c("1" = "Model-free implied correlation", "2" = "Realized correlation")
   )
 
 common_scale <- list(scale_color_manual(
   name = NULL,
   values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-  labels = c("1" = "Implied Correlation", "2" = "Realized Correlation")),
+  labels = c("1" = "Model-free implied correlation", "2" = "Realized correlation")),
   scale_linetype_manual(
     name = NULL,
     values = c("1" = "solid", "2" = "21"), # Distinguishable linetypes
-    labels = c("1" = "Implied Correlation", "2" = "Realized Correlation")
+    labels = c("1" = "Model-free implied correlation", "2" = "Realized correlation")
   )
 )
 

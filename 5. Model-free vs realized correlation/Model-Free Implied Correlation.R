@@ -1,6 +1,6 @@
 #------------------------- General Purpose -------------------------
 # This file computes the model-free implied correlation (MFIC) as is explained in 
-# section 2.3.2 of the thesis.
+# section 2.3.2 of the thesis using the implementation of Section 3.3.1.
 # To obtain the output necessary for other files run this script twice,
 # Using
 #   All months in 2008, 2009 and 2010, and
@@ -14,12 +14,12 @@ library(tidyverse)
 
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #It is possible to take less months or years into account.
 #-------------------------
 
 #Example of variables
-maturity = 90 #We define maturity to target options with roughly the same maturity
+maturity = 30 #We define maturity to target options with roughly the same maturity
 months = c("1","2","3","4","5","6","7","8","9","10","11","12")
 years = c("2008","2009","2010")
 
@@ -57,7 +57,7 @@ df_interest_rate <- zcb %>%
   )
 
 #-------------------------
-#Step 0.2: Determining forward prices: using different clean data set with ATM call and put options.
+#Step 0.2: Determining forward prices: using cleaned data set with ATM call and put options.
 #-------------------------
 #To check
 #Step 0.2.1: Define helper functions to extract the European Call (EC) 
@@ -177,7 +177,7 @@ df_main_int <- df_main_int %>%
 
 # Step 2.1: Final data prep:
 # 1. we only use strikes for which we have a call price in case K>K0 and a put in case K< K0
-# 2. We require any day/maturity has at least 3 Puts and 3 Calls to keep it reliable.
+# 2. We require any day/maturity has at least 3 Puts and 3 Calls for a sufficient approximation
 
 df_main <- df_main_int %>%
   group_by(security_ID, quote_date,expiration) %>%
@@ -286,7 +286,7 @@ pl_heatmap <- ggplot(df_heatmap, aes(x = quote_date, y = as.factor(security_ID),
                       high = "#00407A", 
                       na.value = "#FF6B6B", 
                       name = "Scaled Error", scale = c(0,1)) +
-  theme_minimal() + # Keep this as a base
+  theme_minimal() + 
   theme(
     # Forces the panel and the entire plot background to be plain white
     panel.background = element_rect(fill = "white", color = NA),

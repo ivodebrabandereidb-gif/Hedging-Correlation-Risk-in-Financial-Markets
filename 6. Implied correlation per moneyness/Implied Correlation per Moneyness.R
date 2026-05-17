@@ -1,6 +1,6 @@
 #------------------------- General Purpose -------------------------
-# This file computes the implied correlation over moneyness levels
-# to support section 3.3.2 of the thesis.
+# This file computes the implied correlation over moneyness levels and produces Figure 8, as is explained in 
+# section 2.3.3 of the thesis using the implementation of Section 3.3.1.
 # To obtain the output necessary for other files, run this script twice
 # using,
 #   maturity = 30 and
@@ -12,10 +12,10 @@ library(dplyr)
 library(tidyr)
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #-------------------------
 
-maturity = 30
+maturity = 90
 months = c("1","2","3","4","5","6","7","8","9","10","11","12")
 years = c("2008","2009","2010")
 
@@ -102,7 +102,7 @@ data_to_interpolate <- merge(data_to_interpolate, data.frame(moneyness_grid =mon
 data_to_interpolate <- data_to_interpolate %>%
   left_join(data_closest_maturities, by = c("security_ID", "quote_date"))
 
-# 2.2.4 Now interpolate using the columns already present in your table
+# 2.2.4 Now interpolate using the columns already present in the table
 data_interpolated_int <- data_to_interpolate %>%
   group_by(security_ID, quote_date,moneyness_grid, Tshort, Tlong) %>%
   summarize(
@@ -185,30 +185,27 @@ df_index_iv <- data_interpolated %>%
 # Step 6: Final table
 #-------------------------
 
-# Step 6.1: Calculate Model-Free Implied Correlation (rho_iv)
-# We use the portfolio variance identity: Var(Index) = Sum(wi^2 * s_i^2) + Sum(wi*wj*si*sj*rho)
-# Solving for rho_iv gives the average market-implied correlation for the given horizon.
+# Step 6.1: Calculate the implied correlation per level of moneyness (called "rho_iv" below)
 df_implied_correlations <- df_index_iv  %>%
   left_join(df_numerator_sum, by = c("quote_date","moneyness_grid")) %>%
   left_join(df_denumerator_sum, by = c("quote_date","moneyness_grid")) %>%
   mutate(rho_iv = (IV_maturity^2-numerator_sum)/denumerator_sum)
 
+#-------------------------
+# Step 7: Exporting .csv containing implied levels of correlations and plotting the correlation skew (Figure 8).
+#-------------------------
 
-# Step 6.2: Data Quality Filtering & Smoothing
-# We filter the results to remove days where the correlation surface is overly volatile.
+# Step 7.1
+# We filter the results to remove outliers were the correlation skew is not representative
 df_general_trend_plot <- df_implied_correlations %>%
   filter(moneyness_grid >= 0.80, moneyness_grid <= 1.2) %>%
   group_by(quote_date) %>%
   arrange(moneyness_grid) %>%
   # Flag and remove days where the correlation slope (change across moneyness) is 
-  # unrealistically steep, indicating potential data errors or interpolation 'wiggles'.
+  # unrealistically steep, indicating potential data errors.
   mutate(flag = if_else(all(diff(rho_iv) <=0.4*0.025),1,0)) %>%
   ungroup() %>%
   filter(flag == 1)
-
-#-------------------------
-# Step 6: Plotting the correlation skew.
-#-------------------------
 
 legend_breaks <- as.numeric(as.Date(c("2008-01-01", "2009-01-01", "2010-01-01")))
 legend_limits <- as.numeric(as.Date(c("2008-01-01", "2010-12-31")))
@@ -241,7 +238,7 @@ pl2 <- ggplot(df_general_trend_plot,
 
 print(pl2)
 
-# output
+# Step 7.2: Exporting output
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd('Figures')
 file_name <- paste0("Figure8_Implied_correlations_vs_moneyness_and_time_M", maturity, ".png")

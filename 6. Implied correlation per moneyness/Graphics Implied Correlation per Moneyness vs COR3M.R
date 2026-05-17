@@ -14,10 +14,10 @@ library(patchwork)
 #detach("package:MASS", unload = TRUE)
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Maturity = 90 is used in the thesis. The COR3M index is a measure of implied correlations over 90 days.
 #-------------------------
 
-maturity = 30
+maturity = 90
 
 #------------------------- 
 #Data Loader: Load the calculated implied correlations, 
@@ -34,7 +34,7 @@ df_implied_cor <- df_implied_cor %>% mutate(correlation = rho_iv, quote_date = a
 #-------------------------
 #Loading COR3M (CBOE implied correlation, 3 months)
 #-------------------------
-#.json comes from https://www.cboe.com/us/indices/dashboard/cor3m/ by right-mouse clicking "inspect" (asked Gemini for specifics)
+#.json comes from https://www.cboe.com/us/indices/dashboard/cor3m/ by right-mouse clicking "inspect" 
 
 # 1. Load the data
 # Note: Cboe data often nests the actual values inside a "data" or "values" key
@@ -43,13 +43,11 @@ setwd(paste0("../2. Raw option data/COR3M Data"))
 raw_json <- fromJSON("COR3M (CBOE).json")
 df <- raw_json$data
 
-# 2. Clean it (Cboe usually provides timestamps in milliseconds)
-# This part depends on the exact structure you find, but typically:
 df_cor3m <- df %>%
   mutate(
-    quote_date  = as.Date(date),        # Converts '2006-01-03' to Date
-    close = as.numeric(close),    # Converts '31.340000' to 31.34
-    open  = as.numeric(open),     # Optional: if you want to plot more
+    quote_date  = as.Date(date),  
+    close = as.numeric(close),  
+    open  = as.numeric(open),    
     high  = as.numeric(high),
     low   = as.numeric(low)
   ) 
@@ -76,9 +74,7 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   scale_x_date(
     limits = c(as.Date("2008-01-01"), as.Date("2010-12-31")),
     breaks = seq(as.Date("2008-01-01"), as.Date("2010-12-31"), by = "6 months"),
-    #Format of values on x-axis
     date_labels = "%b/%y",
-    #Ensure the line touches the edges of the plot
     expand = c(0, 0) 
   ) +
   labs(
@@ -90,7 +86,7 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   ) +
   scale_color_manual(
     values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-    labels = c("1" = "Implied Correlation (ATM, 90-Day window)", "2" = "COR3M Index")
+    labels = c("1" = "ATM implied correlation (90-Day window)", "2" = "COR3M Index")
   )+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -103,17 +99,17 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   )+
   scale_linetype_manual(
     values = c("1" = "solid", "2" = "21"),
-    labels = c("1" = "Implied Correlation (ATM, 90-Day window)", "2" = "COR3M Index")
+    labels = c("1" = "ATM implied correlation (90-Day window)", "2" = "COR3M Index")
   )
 
 common_scale <- list(scale_color_manual(
   name = NULL,
   values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-  labels = c("1" = "Implied Correlation (ATM, 90-Day window)", "2" = "COR3M Index")),
+  labels = c("1" = "ATM implied correlation (90-Day window)", "2" = "COR3M Index")),
   scale_linetype_manual(
     name = NULL,
-    values = c("1" = "solid", "2" = "21"), # Distinguishable linetypes
-    labels = c("1" = "Implied Correlation (ATM, 90-Day window)", "2" = "COR3M Index")
+    values = c("1" = "solid", "2" = "21"),
+    labels = c("1" = "ATM implied correlation (90-Day window)", "2" = "COR3M Index")
   )
 )
 

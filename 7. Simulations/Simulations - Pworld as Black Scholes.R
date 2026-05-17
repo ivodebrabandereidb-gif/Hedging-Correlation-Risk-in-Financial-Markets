@@ -29,10 +29,10 @@ library(patchwork)
 #Input: Main parameters.
 #-------------------------
 #Nr of assets underlying the option
-d = 10
+d = 2
 #Nr of trading days in 1 year
 nT = 252
-#Nr of scenario's 
+#Nr of scenarios 
 nscenarios = 10
 #Maturity of the option (in years)
 maturity= 1
@@ -40,7 +40,7 @@ maturity= 1
 greek_hedge = "gamma"
 #The type of option, could be 'log' for a log-contract or 'straddle', for a straddle option.
 optiontype = "straddle"
-#Are the runs to obtain figure 11 from the thesis, put this to TRUE, 
+#Are the runs to obtain figure 11 from the thesis? Then put this to TRUE, 
 #if it is to obtain figures 9 and 10 put it to FALSE.
 #To obtain no particular figure, but for the analysis put it to TRUE.
 for_fig_11 = TRUE
@@ -61,11 +61,6 @@ divisor = d #keeps index price around level of stocks
 
 # Simulate stock paths in P-world
 
-
-# Function that outputs list including simulated stock, variance and correlation paths useful for Q- and P-paths
-# flag_antithetic used in Q-world to price options. NOT used in P-world -> otherwise correlated paths
-
-
 EulerMaruyama_integrator <- function()
 {
   Stocksim =   array(S0,c(d,nT+1,nscenarios))
@@ -80,8 +75,6 @@ EulerMaruyama_integrator <- function()
   {  
     Z = matrix(rnorm(d * nscenarios), nrow = d, ncol = nscenarios)
     
-    # 2. Correlate them: L %*% Z results in the Multivariate Normal samples
-    # W will be an (nsim x d) matrix to match your existing loop logic
     W = t(L %*% Z)
     
     for (sim in (1:nscenarios))
@@ -109,12 +102,10 @@ Stocks_tp = Stocks[,2:(nT+1),]
 
 
 # 1. 'Melt' the array into a data frame
-# This automatically preserves numeric indices if the array doesn't have dimnames
 df_s <- melt(Stocks,   varnames = c("security_id", "t", "scenario"), value.name = "Stock")
 df_stp <- melt(Stocks_tp, varnames = c("security_id", "t", "scenario"), value.name = "Stock_tp")
 
 # Insert security_id = d+1 for the index price
-
 df_index <- df_s %>%
   group_by(scenario,t) %>%
   summarize(Stock = 1/divisor*sum(Stock),
@@ -125,7 +116,6 @@ df_index <- df_s %>%
 df <- rbind(df_s,df_index)
 
 # Insert security_id = d+1 for the index price
-
 df_index_tp <- df_stp %>%
   group_by(scenario,t) %>%
   summarize(Stock_tp = 1/divisor*sum(Stock_tp),
@@ -148,7 +138,7 @@ df_simulated_marketdata <- df %>%
 
 #determining the implied volatility of the index using lognormal approximations
 
-iv_f <- function(security_id, Stockprices,rho){ #lognormal approximation
+iv_f <- function(security_id, Stockprices,rho){ 
   iv = rep(0,d+1) #initialize vector
   iv[security_id != d+1] = ivQ
   
@@ -193,7 +183,7 @@ df_simulated_marketdata <- df_simulated_marketdata %>%
           iv_f(security_id, Stock,rho_Q)) %>%
   ungroup() 
 
-
+# We compute option prices  O_t  = E_Q[ (S(t+T)-S(t))_+ | F_t] using the Black-Scholes formula
 
 BS_price <- function(iv,S0,K,option_maturity,r, optiontype)
 {
@@ -222,6 +212,7 @@ BS_price <- function(iv,S0,K,option_maturity,r, optiontype)
   return(out)
 }
 
+# Bob's portfolio is setup with ATM-options for which the strike at time t is given by S(t).
 df_simulated_marketdata <- df_simulated_marketdata %>%
   rowwise() %>%
   mutate(Option =  BS_price(iv,Stock,Stock,maturity,r,optiontype)$price,
@@ -229,13 +220,6 @@ df_simulated_marketdata <- df_simulated_marketdata %>%
          delta = BS_price(iv,Stock,Stock,maturity,r,optiontype)$delta,
          gamma = BS_price(iv,Stock,Stock,maturity,r,optiontype)$gamma) %>%
   ungroup()
-
-# We compute option prices  O_t  = E_Q[ (S(t+T)-S(t))_+ | F_t]
-#-------------------------------------------------------------
-
-# Bob's portfolio is setup with ATM-options for which the strike at time t is given by S(t).
-
-# Q-samples of S(t+T)| F_t
 
 
 #----------------------
@@ -261,7 +245,7 @@ portfolio_f <- function(greek_hedge, security_id, gamma,delta,vega, Option,Stock
     shares_option = - partial_OI_partial_sigma_i/vega
     shares_option[index] = alpha_index
   }
-  #Not correct yet: S_I = 1/D*(S1+...+Sd), the delta of the index needs to be scaled!!!
+  
   shares_stock = -shares_option*delta
   
   shares_bank = -(sum(shares_option*Option)+sum(shares_stock*Stock))
@@ -277,7 +261,7 @@ df_trade_execution <- df_simulated_marketdata %>%
 PNL_theoretical_f <- function(gamma, IV, S_Tp,S_T,dt)
 {
   R = (S_Tp-S_T)/S_T
-  return(0.5*gamma*S_T^2*(R^2-IV^2*dt)) #converts boolean to 1 and 0 values
+  return(0.5*gamma*S_T^2*(R^2-IV^2*dt)) 
 }
 
 df_trade_execution$PNL_theoretical <- PNL_theoretical_f(df_trade_execution$gamma, df_trade_execution$iv, df_trade_execution$Stock_tp,df_trade_execution$Stock,dt)
@@ -409,6 +393,11 @@ get(paste0("pl_evol_",optiontype, d))
 # When all 4 are in memory, run up to 469 to obtain figure 9 and 10.
 #-------------------------
 
+
+
+
+
+
 if (!for_fig_11) {
   #-------------------------
   # Figure 9
@@ -494,7 +483,6 @@ pl_capm <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
     y = "Option disperion trade excess return (%)",
     color = "Legend Title",
     linetype = "Legend Title"  )+
-  # 50-day Simple Moving Average
   
   theme_minimal() +
   theme(panel.grid.minor = element_blank())+
@@ -515,7 +503,6 @@ pl_real_vs_theor <- ggplot(df_PNL, aes(x = PNL_theoretical*100, y = PNL_realized
     y = "Realized P&L (%)",
     color = "Legend Title",
     linetype = "Legend Title"  )+
-  # 50-day Simple Moving Average
   
   theme_minimal() +
   theme(panel.grid.minor = element_blank())+

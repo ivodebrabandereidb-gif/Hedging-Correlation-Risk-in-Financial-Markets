@@ -4,7 +4,7 @@ zcb = NULL
 base_path <- dirname(getwd())
 
 #------------------------- 
-# Load option data and zero coupon data.
+# Load option, zero-coupon yields and divisor data.
 #-------------------------
 
 for(year in years)

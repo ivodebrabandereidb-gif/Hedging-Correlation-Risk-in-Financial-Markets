@@ -16,10 +16,10 @@ library(patchwork)
 #detach("package:MASS", unload = TRUE)
 
 #------------------------- 
-#Input: Change maturity between 30 and 90 days to obtain the results from the paper.
+#Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #-------------------------
 
-maturity = 30
+maturity = 90
 
 #------------------------- 
 #Data Loader: Load the calculated implied and realized correlations, 
@@ -53,9 +53,7 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   scale_x_date(
     limits = c(as.Date("2008-01-01"), as.Date("2010-12-31")),
     breaks = seq(as.Date("2008-01-01"), as.Date("2010-12-31"), by = "6 months"),
-    #Format of values on x-axis
     date_labels = "%b/%y",
-    #Ensure the line touches the edges of the plot
     expand = c(0, 0) 
   ) +
   scale_y_continuous(breaks = c(0.2, 0.4, 0.6, 0.8))+
@@ -68,7 +66,7 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
   ) +
   scale_color_manual(
     values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-    labels = c("1" = "Implied Correlation (ATM)", "2" = "Realized Correlation")
+    labels = c("1" = "ATM implied correlation", "2" = "Realized correlation")
   )+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -79,20 +77,20 @@ plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID,
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )+
-  annotate("text", x = as.Date("2010-09-01"), y = 0.95, label = "90-day window")+
+  annotate("text", x = as.Date("2010-09-01"), y = 0.95, label = paste0(maturity,"-day window"))+
   scale_linetype_manual(
     values = c("1" = "solid", "2" = "21"),
-    labels = c("1" = "Implied Correlation (ATM)", "2" = "Realized Correlation")
+    labels = c("1" = "ATM implied correlation", "2" = "Realized correlation")
   )
 
 common_scale <- list(scale_color_manual(
   name = NULL,
   values = c("1" = "#DD8A2E", "2" = "#1FABD5"),
-  labels = c("1" = "Implied Correlation (ATM)", "2" = "Realized Correlation")),
+  labels = c("1" = "ATM implied correlation", "2" = "Realized correlation")),
   scale_linetype_manual(
     name = NULL,
-    values = c("1" = "solid", "2" = "21"), # Distinguishable linetypes
-    labels = c("1" = "Implied Correlation (ATM)", "2" = "Realized Correlation")
+    values = c("1" = "solid", "2" = "21"), 
+    labels = c("1" = "ATM implied correlation", "2" = "Realized correlation")
   )
 )
 
