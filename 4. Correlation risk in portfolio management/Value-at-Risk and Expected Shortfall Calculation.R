@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file is constructed to give insight in the results explained in section 1.2 of the thesis. 
+# This file provides the results explained in section 1.2 of the thesis. 
 # Furthermore, it constructs figure 2. The exact parameter settings to get to the figures are explained in the thesis.
 
 library(MASS)
@@ -30,15 +30,15 @@ sigma_2 = 0.25
 rho_values <- seq(-0.99, 0.99, by = 0.01)
 
 #Variables concerning the options
-strike = S_1 + S_2
-put_premium = 7
+K_a = 42
+put_premium =0
 #put_premium = 0
 
-WOstrike = S_1
-WOput_premium = 4.5
+K_b = 16
+WOput_premium = 0
 #WOput_premium = 0
 
-#Variables concerning the VaR
+#1-confidence level for VaR and ES calculation
 alpha = 0.05
 
 #Variables regarding simulation settings
@@ -64,37 +64,35 @@ ES_3 <- numeric(length(rho_values))
 
 set.seed(123)
 
-Z <- matrix(rnorm(n * 2), ncol = 2)
+Z <- matrix(rnorm(n*2), ncol = 2)
 Z
 
 #simulation from a multivariate normal distribution 
 for (i in seq_along(rho_values)) {
   rho <- rho_values[i]
-  R <- matrix(c(1, rho,
-                rho, 1), nrow = 2, byrow = TRUE)
+  R <- matrix(c(1, rho, rho, 1), nrow = 2, byrow = TRUE)
   
-  # Cholesky factor
+  # Cholesky factorization
   L <- t(chol(R))   
   X <- Z %*% t(L)
   
-  T_year_return <- data.frame(
+  Stocks_at_T <- data.frame(
     Stock_1 = numeric(n),
     Stock_2 = numeric(n)
   )
   
   
-  T_year_return$Stock_1 <- exp((mu_1-sigma_1^2/2) * T + X[,1] * sqrt(T) * sigma_1) * S_1
-  T_year_return$Stock_2 <- exp((mu_2-sigma_2^2/2) * T + X[,2] * sqrt(T) * sigma_2) * S_2 
+  Stocks_at_T$Stock_1 <- exp((mu_1-sigma_1^2/2) * T + X[,1] * sqrt(T) * sigma_1) * S_1
+  Stocks_at_T$Stock_2 <- exp((mu_2-sigma_2^2/2) * T + X[,2] * sqrt(T) * sigma_2) * S_2 
   
-  T_year_return$sum_col <- T_year_return$Stock_1 + T_year_return$Stock_2
-  T_year_return$hedged <- pmax(strike - T_year_return$sum_col, 0) + T_year_return$sum_col
-  T_year_return$worst <- pmin(T_year_return$Stock_1,
-                              T_year_return$Stock_2)
-  T_year_return$worst_put <- pmax(WOstrike - T_year_return$worst, 0) + T_year_return$sum_col
+  Stocks_at_T$sum_col <- Stocks_at_T$Stock_1 + Stocks_at_T$Stock_2
+  Stocks_at_T$hedged <- pmax(K_a - Stocks_at_T$sum_col, 0) + Stocks_at_T$sum_col
+  Stocks_at_T$worst <- pmin(Stocks_at_T$Stock_1,Stocks_at_T$Stock_2)
+  Stocks_at_T$worst_put <- pmax(K_b - Stocks_at_T$worst, 0) + Stocks_at_T$sum_col
   
-  loss_unhedged <- (S_1 + S_2) - T_year_return$sum_col
-  loss_hedged   <- (S_1 + S_2 + put_premium) - T_year_return$hedged
-  loss_WOhedged   <- (S_1 + S_2 + WOput_premium) - T_year_return$worst_put 
+  loss_unhedged <- (S_1 + S_2) - Stocks_at_T$sum_col
+  loss_hedged   <- (S_1 + S_2 + put_premium) - Stocks_at_T$hedged
+  loss_WOhedged   <- (S_1 + S_2 + WOput_premium) - Stocks_at_T$worst_put 
   
   
   VaR_1[i] <- quantile(loss_unhedged, 1 - alpha)
@@ -136,7 +134,7 @@ plot_data_var <- results_df %>%
     ID = recode(ID,
                 "VaR_1" = "Unhedged Portfolio",
                 "VaR_2" = "Hedged by index put option",
-                "VaR_3" = "Hedged by worst-off put option"
+                "VaR_3" = "Hedged by worst-of put option"
     )
   )
 
@@ -150,7 +148,7 @@ plot_data_es <- results_ES_df %>%
     ID = recode(ID,
                 "ES_1" = "Unhedged Portfolio",
                 "ES_2" = "Hedged by index put option",
-                "ES_3" = "Hedged by worst-off put option"
+                "ES_3" = "Hedged by worst-of put option"
     )
   )
 
@@ -173,13 +171,13 @@ y_breaks <- seq(
 my_colors <- c(
   "Unhedged Portfolio" = "#DD8A2E",
   "Hedged by index put option" = "#0B3D91",
-  "Hedged by worst-off put option" = "#1FABD5"
+  "Hedged by worst-of put option" = "#1FABD5"
 )
 
 my_linetypes <- c(
   "Unhedged Portfolio" = "solid",
-  "Hedged by index put option" = "dashed",
-  "Hedged by worst-off put option" = "solid"
+  "Hedged by index put option" = "21",
+  "Hedged by worst-of put option" = "solid"
 )
 
 # VaR plot
