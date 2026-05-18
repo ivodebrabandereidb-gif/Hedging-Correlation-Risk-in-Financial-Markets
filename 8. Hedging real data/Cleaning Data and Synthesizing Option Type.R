@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# computing the P&L of a delta-hedging strategy
+# computing the P&L of a delta-hedging strategy for the emprical results in Chapter 6
 
 #-------------------------      Steps      -------------------------
 # STEP 0: loading/preparing data
@@ -32,8 +32,8 @@ library(tidyverse)
 Option_type = "Straddle"
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 90
-#choose hedging strategy: gamma or vega, with vega the trade at the end of the thesis using vega-hedging
+maturity = 30
+#choose hedging strategy: gamma or vega, with gamma the trade on the correlation gap andvega the trade on the correlation risk premium.
 greek_hedge = "vega" 
 #To use normal delta fill in 'delta', for a sticky delta use 'delta_sticky'
 deltatype = 'delta'
@@ -72,7 +72,7 @@ df_interest_rate <- zcb %>%
 #-------------------------------
 #Step 0.2: Determining forward prices: using clean data set with ATM call and put options
 #-------------------------------
-#To check
+
 #Step 0.2.1: Define helper functions to extract the European Call (EC) 
 #and European Put (EP) option prices.
 EP_no_warning <- function(midquote,delta){
@@ -133,7 +133,7 @@ df_forward <- df_forward %>%
 #PNL_theoretical: theoretical P&L when delta-hedging the option on the given record of the table for 1 day
 
 #NOTE: we only keep those time slices that contain a liquid put at Kmin and a call at Kplus.
-#Note 2: when working with log-contracts on the index, even stricter conditions on the time slices are required.
+#Note 2: when working with log-contracts on the index, even stricter conditions on the time slices are required. Not taken up in this thesis for the backtesting of the option trades
 
 #Computing Black-Scholes Gamma 
 data_cleaned <- data_cleaned %>%
@@ -197,12 +197,12 @@ df_TandTp$PNL_theoretical_w_vega <- PNL_theoretical_w_vega_f(df_TandTp$gamma,df_
 #----------------------------------------------------------------------------------------------------------------------------
 
 # Next, we define for each underlying security_ID, the type of option with which is delta-hedged: straddle, log-contract,...
-# The portfolio of options is translated into an extra column in df_main giving the composition of each option (most of them will be 0).
+# The portfolio of options is translated into an extra column in df_main giving the composition of each option payoff chosen (most of them will be 0).
 # For example: a straddle will have a 1 for the ATM call and put and 0 elsewhere
 # Next, we collapse each quote_date and security_ID to one line representing the synthesized option, making use of linearity of the Greeks and theoretical P&L
 
 #For straddle options, we use the strike so that the gamma of the resulting option is maximized. 
-#when we are using the Black-Scholes gamma: this is simple the put and call closest to the forward price
+#when we are using the Black-Scholes gamma: this is simply the put and call closest to the forward price
 
 df_main_int <- df_TandTp %>%
   group_by(quote_date,security_ID,expiration) %>%

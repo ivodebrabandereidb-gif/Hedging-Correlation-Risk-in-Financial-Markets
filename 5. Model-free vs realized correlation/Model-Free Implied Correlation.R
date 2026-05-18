@@ -262,7 +262,6 @@ days_and_securities <- period %>%
   inner_join(security_IDs, by = c("quote_date")) %>%
   select(quote_date,security_ID)
 
-#To check
 #Step 3.2: add the nearest and next MFIV data.
 df_MFIV_full <- days_and_securities %>%
   left_join(df_MFIV, by = c("quote_date","security_ID"))
@@ -322,7 +321,7 @@ df_MFIV_pulled <- df_MFIV_full %>%
 #-------------------------
 #Step 4: Compute model free implied correlation (MFIC) 
 #-------------------------
-#To check
+
 #Result will be a table containing:
 #quote_date
 #Maturity information
