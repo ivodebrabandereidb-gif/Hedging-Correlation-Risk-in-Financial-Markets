@@ -1,5 +1,8 @@
 #------------------------- General Purpose -------------------------
-# computing the P&L of a delta-hedging strategy for the emprical results in Chapter 6
+# This program applies the option dispersion trades discussed in Chapter 4 to the empirical dataset.
+# This program is the basis for all the figures and empirical results in Chapter 6.
+# Mainly, this output outputs a .csv with the daily realized and theoretical P&L of each trade.
+# This output file is later used by the other programs in the folder for further analysis
 
 #-------------------------      Steps      -------------------------
 # STEP 0: loading/preparing data
