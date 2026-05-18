@@ -5,8 +5,8 @@ Insert in this folder the Dow Jones option data from 2010.
 This folder should contain 14 files.
 
 ## Files containing option data per month
-It is important to have 1 file per month named 'optdata_<YYYY>_<M>.csv'.
-Replace `<YYYY>` with the desired year and `<M>` with the desired month.
+It is important to have 1 file per month named `optdata_YYYY_M.csv`.
+Replace `YYYY` with the desired year and `M` with the desired month.
 The csv should be comma separated and uses "." as decimal separator.
 Each file should contain the following columns for all trading dates from a certain month for all relevant assets.  
 
@@ -27,9 +27,10 @@ The csv should be comma separated and uses "." as decimal separator.
 
 ## File containing the zero coupon bond returns
 
-It is important that the zero coupon bond returns file bears the name "zerocd_<YYYY>.csv" and contains returns on a zero coupon bond over different maturities for the year 2008.
+It is important that the zero coupon bond returns file bears the name "zerocd_<YYYY>.csv" and contains returns on a zero coupon bond over different maturities for the year 2010.
 The csv should be comma separated and uses "." as decimal separator.
 
 | quote_date | days | rate |
 |---|---|---|
 | Date as an Excel serial date number  | Maturity in days | Return on ZC bond |
+

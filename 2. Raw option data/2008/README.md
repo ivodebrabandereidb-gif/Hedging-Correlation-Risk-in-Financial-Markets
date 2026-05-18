@@ -5,8 +5,8 @@ Insert in this folder the Dow Jones option data from 2008.
 This folder should contain 14 files.
 
 ## Files containing option data per month
-It is important to have 1 file per month named 'optdata_<YYYY>_<M>.csv'.
-Replace `<YYYY>` with the desired year and `<M>` with the desired month.
+It is important to have 1 file per month named `optdata_YYYY_M.csv`.
+Replace `YYYY` with the desired year and `M` with the desired month.
 The csv should be comma separated and uses "." as decimal separator.
 Each file should contain the following columns for all trading dates from a certain month for all relevant assets.  
 
