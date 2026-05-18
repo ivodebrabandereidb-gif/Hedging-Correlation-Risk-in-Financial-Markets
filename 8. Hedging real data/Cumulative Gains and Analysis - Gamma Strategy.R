@@ -4,13 +4,10 @@
 # Furthermore, it constructs figures 11, 12 and 13, and Tables 4 (data is printed throughout the script) and 5.
 
 #------------------------- !! Important !! -------------------------
-<<<<<<< HEAD
+
 # To obtain figures 11 and 12 in the thesis:
-# Run this script up to line  using,
-=======
-# To obtain figures 12 and 13 in the thesis:
-# Run this script up to line 372 using either
->>>>>>> bf6426041d8c86140bcef239a578454cb869a749
+# Run this script up to line 372 using,
+
 # maturity = 30 and 90,
 # delta = "delta"
 # When both maturities are in memory then run the last lines of the script.

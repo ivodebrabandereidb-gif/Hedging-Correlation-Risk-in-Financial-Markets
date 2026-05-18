@@ -1,13 +1,8 @@
 #------------------------- General Purpose -------------------------
-<<<<<<< HEAD
-# This file is constructed to give insight in the results of the vega trading strategy 
+
+# This file provides insights in the results of the trading strategy on the correlation risk premium 
 # in accordance to what is written in the thesis in Chapter 6.3 .
 # Furthermore, it constructs figure 14 and Table 6 (data is printed throughout the script).
-=======
-# This file provides insights in the results of the trading strategy on the correlation risk premium 
-# in accordance to what is written in the thesis in Chapter 6.2 .
-# Furthermore, it constructs figure 15 and Table 6 (data is printed throughout the script).
->>>>>>> bf6426041d8c86140bcef239a578454cb869a749
 
 #------------------------- !! Important !! -------------------------
 # To obtain the figures laid out in the thesis:
