@@ -35,12 +35,13 @@ pl_index <- ggplot(df_index, aes(x  = quote_date, y = price_index)) +
     date_labels = "%b/%y",
     expand = c(0, 0) 
   ) +
-  labs( x = NULL)+
-  scale_colour_gradientn(colours = c("#1FABD5", "#00407A")) +
-   ylab(expression("Index value")) +theme_minimal() +  theme(
+  labs( x = NULL, y = "Index value") +theme_minimal() +  
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.minor = element_blank(),
     axis.line = element_line(color = "black", linewidth = 0.7),
     axis.text = element_text(color = "black"),
-    axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
+    axis.ticks = element_line(color = "black")
   )
 
 print(pl_index)
@@ -49,6 +50,8 @@ ggsave('Fig3_Price_Level_DJIA.png',
        plot=pl_index,
        width = 6.5,
        height = 3.25,
-       units = "in",   # Always specify inches
-       dpi = 300       # High resolution for printing
+       units = "in",
+       dpi = 300
 )
+
+
