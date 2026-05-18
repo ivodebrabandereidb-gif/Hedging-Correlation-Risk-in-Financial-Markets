@@ -6,10 +6,19 @@ This repository is made as a central location where the code is stored to recrea
 | Chapter | R-Script | Comment |
 |---|---|---|
 | 1. Literature study | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
-| 2. Preliminaries | `Realized Correlation.R` | Computes realized correlations as explained in section 2.3.1 |
-| 2. Preliminaries  | `Model-Free Implied Correlation.R` | Performs the analysis in Section 1.2 |
-| 1. Literature study  | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
-| 1. Literature study  | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
+| 3. Empirical measurement of the correlation gap | `Realized Correlation.R` | Computes realized correlations as explained in Section 2.3.1 |
+| 3. Empirical measurement of the correlation gap  | `Model-Free Implied Correlation.R` | Computes the model-free implied correlations as explained in Section 2.3.2 |
+| 3. Empirical measurement of the correlation gap  | `COR3M.R` | Constructs figure 3, included in Section 2.3.3 |
+| 3. Empirical measurement of the correlation gap | `Implied Correlation per Moneyness.R` | Constructs figure 5, included in Section 3.3.2 |
+| 3. Empirical measurement of the correlation gap | `Graphics Model-Free Implied vs Realized Correlation.R` | Constructs figure 5, included in Section 3.3.2 |
+| 3. Empirical measurement of the correlation gap  | `Graphics Implied Correlation per Moneyness vs COR3M` | Performs the analysis in Section 1.2 |
+| 3. Empirical measurement of the correlation gap  | `Graphics Implied per Moneyness vs Realized` | Performs the analysis in Section 1.2 |
+| 5. Option dispersion trading in a simulated world  | `Simulations - Pworld as Black Scholes` | Performs the analysis in Section 1.2 |
+| 6. Backtesting option dispersion trades on empirical data | `Cleaning Data and Synthesizing Option Type` | Performs the analysis in Section 1.2 |
+| 6. Backtesting option dispersion trades on empirical data  | `Cumulative Gains and Analysis - Gamma Strategy` | Performs the analysis in Section 1.2 |
+| 6. Backtesting option dispersion trades on empirical data  | `Cumulative Gains and Analysis - Vega Strategy` | Performs the analysis in Section 1.2 |
+| 6. Backtesting option dispersion trades on empirical data  | `implied_volatility_slope_sticky_delta` | Performs the analysis in Section 1.2 |
+
 
 ## General Workflow
 This section serves as an optimal order to run all R-scripts.
@@ -42,13 +51,13 @@ This file is intended to be sourced by other scripts and is not executed standal
 #### Purpose
 
 This file is constructed to give insight in the results explained in section 1.2 of the thesis. 
-Furthermore, it constructs figure 2.
+Furthermore, it constructs figure 1.
 
 #### Inputs
 - /
 
 #### Outputs
-- `Fig2_VaR_ES_Portfolios.png`
+- `Fig1_VaR_ES_Portfolios.png`
 
 
 ### 4. '5. Model-free vs realized correlation / Realized Correlation.R'
@@ -76,32 +85,31 @@ This file computes the model-free implied correlation (MFIC) as is shown in sect
 #### Outputs
 - `Model_Free_Implied_Correlation_M<Mat>.csv`
 - `INTERMEZZO_heatmap_2010_12_M<Mat>.png`
-with `<Mat>` depicting the maturity specified.
 
 ### 6. '5. Model-free vs realized correlation / Graphics Model-Free Implied vs Realized Correlation.R'
 
 #### Purpose
 
-This file constructs figure 5 from the thesis.
+This file constructs figure 4 from the thesis.
 
 #### Inputs
 - `Model_Free_Implied_Correlation_M<Mat>.csv` from `Model-Free Implied Correlation.R`
 - `Realized_Correlation_M<Mat>.csv` from `Model-Free Implied Correlation.R`
 
 #### Outputs
-- `Figure5_ModelFree_Implied_vs_Realized_correlation.png`
+- `Figure4_ModelFree_Implied_vs_Realized_correlation.png`
 
 ### 7. '6. Implied correlation per moneyness / COR3M.R'
 
 #### Purpose
 
-This file constructs figure 3 from the thesis.
+This file constructs figure 2 from the thesis.
 
 #### Inputs
 - `COR3M Data` in `2. Raw option input`
 
 #### Outputs
-- `COR3M.png`
+- `Fig2_COR3M.png`
 
 ### 8. '6. Implied correlation per moneyness / Implied Correlation per Moneyness.R'
 
@@ -113,10 +121,23 @@ This file computes the implied correlation over moneyness levels to support sect
 - The option data loaded using the `Loading Data.R`.
 
 #### Outputs
-- `Figure8_Implied_correlations_vs_moneyness_and_time_M<Mat>.png`
+- `Figure7_Implied_correlations_vs_moneyness_and_time_M<Mat>.png`
 - `Implied correlation per moneyness_M<Mat> - ATM.csv`
 
 ### 9. '6. Implied correlation per moneyness / Graphics Implied per Moneyness vs Realized.R'
+
+#### Purpose
+
+This file constructs figure 5 from the thesis.
+
+#### Inputs
+- `Implied correlation per moneyness_M<Mat> - ATM.csv` from `Implied Correlation per Moneyness.R`
+- `Realized_Correlation_M<Mat>.csv` from `Realized Correlation.R`
+
+#### Outputs
+- `Figure5_ATM_Implied_vs_realized_correlation_30_90.png`
+
+### 10. '6. Implied correlation per moneyness / Graphics Implied Correlation per Moneyness vs COR3M.R'
 
 #### Purpose
 
@@ -124,23 +145,10 @@ This file constructs figure 6 from the thesis.
 
 #### Inputs
 - `Implied correlation per moneyness_M<Mat> - ATM.csv` from `Implied Correlation per Moneyness.R`
-- `Realized_Correlation_M<Mat>.csv` from `Realized Correlation.R`
-
-#### Outputs
-- `Figure6_ATM_Implied_vs_realized_correlation_30_90`
-
-### 10. '6. Implied correlation per moneyness / Graphics Implied Correlation per Moneyness vs COR3M.R'
-
-#### Purpose
-
-This file constructs figure 7 from the thesis.
-
-#### Inputs
-- `Implied correlation per moneyness_M<Mat> - ATM.csv` from `Implied Correlation per Moneyness.R`
 - `COR3M Data` in `2. Raw option input`
 
 #### Outputs
-- `Figure7_ImpliedATM_vs_COR3M_M<Mat>.png`
+- `Figure6_ImpliedATM_vs_COR3M_M<Mat>.png`
 
 ### 11. '6. Simulations / Simulations - Pworld as Black Scholes.R'
 
@@ -152,9 +160,9 @@ This file supports the analysis from Chapter 5 in the thesis. .
 - /
 
 #### Outputs
-- `Figure9_log2log10straddle2straddle10_evol.png`
-- `Figure10_log2log10straddle2straddle10_scatter.png`
-- `Figure11_Simulations_Analysis.png`
+- `Figure8_log2log10straddle2straddle10_evol.png`
+- `Figure9_log2log10straddle2straddle10_scatter.png`
+- `Figure10_Simulations_Analysis.png`
 
 ### 12. '8. Hedging real data / implied_volatility_slope_sticky_delta.R'
 
@@ -165,19 +173,19 @@ Constructs the sticky-delta implied volatility slope measure by cleaning the opt
 This file is intended to be sourced by other scripts and is not executed standalone.
 
 #### Inputs
-- /
+- A dataset called `data`
+- A parameter `maturity`
 
 #### Outputs
-- `Figure9_log2log10straddle2straddle10_evol.png`
-- `Figure10_log2log10straddle2straddle10_scatter.png`
-- `Figure11_Simulations_Analysis.png`
+- A dataset called `df_iv_slope`
+
+
 
 ### 13. '8. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
 
 #### Purpose
 
-Constructs the sticky-delta implied volatility slope measure by cleaning the option dataset, removing duplicate option observations, and computing implied volatility slopes across strike prices.
-This file is intended to be sourced by other scripts and is not executed standalone.
+computing the P&L of a delta-hedging strategy.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
@@ -191,29 +199,27 @@ This file is intended to be sourced by other scripts and is not executed standal
 #### Purpose
 
 This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
-Furthermore, it constructs figures 12, 13 and 14, and Table 4 (data is printed throughout the script).
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
-- `Implied correlation per moneyness_M<Mat> - ATM.csv` from `Implied Correlation per Moneyness.R`
-- `Realized_Correlation_M<Mat>.csv` from `Realized Correlation.R`
+- `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>.csv` from `Cleaning Data and Synthesizing Option Type.R`
 
 #### Outputs
-- `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
-- `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL`
+- `Figure11_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
+- `Figure12_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL.png`
+- `Figure13_realmarket_analysis_<greek_hedge>_vega_corrected_<Mat>.png`
 
 ### 15. '8. Hedging real data / Cummulative Gains and Analysis - Vega Strategy.R'
 
 #### Purpose
 
-This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
-Furthermore, it constructs figures 12 and 13.
+This file is constructed to give insight in the results of the vega trading strategy in accordance to what is written in the thesis in Chapter 6.3 .
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
+- `Option_dispersion_trade_<delta_type>_<greek_hedge>_<Maturity>.csv` from `Cleaning Data and Synthesizing Option Type.R`
 
 #### Outputs
-- `Figure12_PNL_cummulative_<greek_hedge>_<delta>_30_90.png`
-- `Figure13_Scatter_Realized_daily_vs_<greek_hedge>_<delta>_PL
+- `Figure14_Realmarketdata_analysis_<greek_hedge>.png`
 
 

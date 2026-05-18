@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file constructs figure 3 from the thesis, using the COR3M Data in '2. Raw option input'. 
+# This file constructs figure 2 from the thesis, using the COR3M Data in '2. Raw option input'. 
 
 library(jsonlite)
 library(ggplot2)
@@ -58,7 +58,7 @@ pl_cor3m <- ggplot(df_clean, aes(x = date, y = close/100)) +
   )
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
-ggsave('COR3M.png', 
+ggsave('Fig2_COR3M.png', 
        plot=pl_cor3m,
        width = 6.5,
        height = 3.25,

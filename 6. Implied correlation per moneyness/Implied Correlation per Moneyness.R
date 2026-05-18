@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file computes the implied correlation over moneyness levels and produces Figure 8, as is explained in 
+# This file computes the implied correlation over moneyness levels and produces Figure 7, as is explained in 
 # section 2.3.3 of the thesis using the implementation of Section 3.3.1.
 # To obtain the output necessary for other files, run this script twice
 # using,
@@ -241,7 +241,7 @@ print(pl2)
 # Step 7.2: Exporting output
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd('Figures')
-file_name <- paste0("Figure8_Implied_correlations_vs_moneyness_and_time_M", maturity, ".png")
+file_name <- paste0("Figure7_Implied_correlations_vs_moneyness_and_time_M", maturity, ".png")
 
 ggsave(file_name, 
        plot=pl2,

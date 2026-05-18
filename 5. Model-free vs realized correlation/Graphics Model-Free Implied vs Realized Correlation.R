@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file constructs figure 5 from the thesis, using the outputs: 
+# This file constructs figure 4 from the thesis, using the outputs: 
 #   `Model_Free_Implied_Correlation_M<Mat>.csv` from Model-Free Implied Correlation.R
 #   `Realized_Correlation_M<Mat>.csv` from Realized Correlation.R
 
@@ -120,6 +120,6 @@ top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(l
 top_row
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(paste0("Figures"))
-ggsave('Figure5_ModelFree_Implied_vs_Realized_correlation.png', plot=top_row,  width = 6.5,
+ggsave('Figure4_ModelFree_Implied_vs_Realized_correlation.png', plot=top_row,  width = 6.5,
        height = 5.25)
 

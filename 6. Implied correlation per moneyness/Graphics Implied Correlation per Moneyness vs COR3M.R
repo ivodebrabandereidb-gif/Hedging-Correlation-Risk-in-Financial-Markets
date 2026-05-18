@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file constructs figure 7 from the thesis, using the outputs: 
+# This file constructs figure 6 from the thesis, using the outputs: 
 #   `Implied correlation per moneyness_M<Mat> - ATM.csv` from Implied Correlation per Moneyness.R
 #   `COR3M Data` in `2. Raw option input`
 
@@ -133,6 +133,6 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
 
 
-ggsave(paste0('Figure7_ImpliedATM_vs_COR3M_M',maturity,'.png'), plot=top_row,  width = 7,
+ggsave(paste0('Figure6_ImpliedATM_vs_COR3M_M',maturity,'.png'), plot=top_row,  width = 7,
        height = 3.5)
 

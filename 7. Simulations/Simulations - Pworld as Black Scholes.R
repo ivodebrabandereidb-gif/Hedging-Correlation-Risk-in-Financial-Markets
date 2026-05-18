@@ -3,19 +3,19 @@
 
 #------------------------- !! Important !! -------------------------
 # To specifically obtain the figures from the thesis:
-#   For figure 9 and 10 put:
+#   For figure 8 and 9 put:
 #     d = 2 and 10
 #     optiontype = "straddle" and "log"
 #     nscenarios = 500
-#     for_fig_11 = FALSE
+#     for_fig_10 = FALSE
 #     run up to line 400
-#     It will automatically take only the first 10 scenario's to plot figure 9.
+#     It will automatically take only the first 10 scenario's to plot figure 8.
 #     After running all 4 scenario's, run lines 401 - 469 to make and save the figures.
-#   For figure 11:
+#   For figure 10:
 #     d = 10
 #     optiontype = "straddle"
 #     nscenarios = 10
-#     for_fig_11 = TRUE
+#     for_fig_10 = TRUE
 #     run all lines
 
 library(ggplot2)
@@ -40,10 +40,10 @@ maturity= 1
 greek_hedge = "gamma"
 #The type of option, could be 'log' for a log-contract or 'straddle', for a straddle option.
 optiontype = "straddle"
-#Are the runs to obtain figure 11 from the thesis? Then put this to TRUE, 
-#if it is to obtain figures 9 and 10 put it to FALSE.
+#Are the runs to obtain figure 10 from the thesis? Then put this to TRUE, 
+#if it is to obtain figures 8 and 9 put it to FALSE.
 #To obtain no particular figure, but for the analysis put it to TRUE.
-for_fig_11 = TRUE
+for_fig_10 = TRUE
 
 r=0.02
 mu = 0.5
@@ -305,7 +305,7 @@ ggplot(df_PNL, aes(x = time, y = cumulative_PNL, color = scenario, group = scena
   theme(legend.position = "right")
 
 #--------------------------------
-# Preparing for figure 9. (only plotting up to scenario 10)
+# Preparing for figure 8. (only plotting up to scenario 10)
 #--------------------------------
 
 df_PNL_filtered <- df_PNL %>%
@@ -353,7 +353,7 @@ df_scatter_plot <- df_tot_PNL %>%
   inner_join(df_diff_cov, by = c("scenario"))
 
 #--------------------------------
-# Preparing figure 10.
+# Preparing figure 9.
 #--------------------------------
 
 pl_cummul <- ggplot(df_scatter_plot, aes(x = diff_impl_real_cov, y = cumulative_PNL)) +
@@ -384,13 +384,13 @@ get(paste0("pl_scatter_",optiontype, d))
 get(paste0("pl_evol_",optiontype, d))
 
 #------------------------- 
-# Constructing figures 9 and 10 from the paper, make sure to have run up to line 397 for the following 4 scenarios.
+# Constructing figures 8 and 9 from the paper, make sure to have run up to line 397 for the following 4 scenarios.
 # Log-contract (optiontype) with 2 assets (d).
 # Log-contract (optiontype) with 10 assets (d).
 # Straddle-contract (optiontype) with 2 assets (d).
 # Straddle-contract (optiontype) with 10 assets (d).
 # All 4 should be in memory.
-# When all 4 are in memory, run up to 469 to obtain figure 9 and 10.
+# When all 4 are in memory, run up to 469 to obtain figure 8 and 9.
 #-------------------------
 
 
@@ -398,9 +398,9 @@ get(paste0("pl_evol_",optiontype, d))
 
 
 
-if (!for_fig_11) {
+if (!for_fig_10) {
   #-------------------------
-  # Figure 9
+  # Figure 8
   #-------------------------
   
   #Test if everything is loaded properly
@@ -417,10 +417,10 @@ if (!for_fig_11) {
   # Display the result
   combined_plot
   
-  #Save the result for figure 9
+  #Save the result for figure 8
   setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
   setwd(paste0("Figures"))
-  ggsave('Figure9_log2log10straddle2straddle10_evol.png', 
+  ggsave('Figure8_log2log10straddle2straddle10_evol.png', 
          plot=combined_plot,
          width = 6.5,
          height = 5,
@@ -429,7 +429,7 @@ if (!for_fig_11) {
   )
   
   #-------------------------
-  # Figure 10
+  # Figure 9
   #-------------------------
   
   #test if all 4 scenario's are in memory.
@@ -448,7 +448,7 @@ if (!for_fig_11) {
   
   setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
   setwd(paste0("Figures"))
-  ggsave('Figure10_log2log10straddle2straddle10_scatter.png', 
+  ggsave('Figure9_log2log10straddle2straddle10_scatter.png', 
          plot=combined_plot,
          width = 6.5,
          height = 5,
@@ -471,7 +471,7 @@ capm_model <- lm(Re ~ RMe, data = df_CAPM)
 summary(capm_model)
 
 #-------------------------
-# Prepare for figure 11.
+# Prepare for figure 10.
 #-------------------------
 
 pl_capm <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
@@ -520,7 +520,7 @@ print(pl_analysis)
 # Save the result
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(paste0("Figures"))
-ggsave('Figure11_Simulations_Analysis.png', 
+ggsave('Figure10_Simulations_Analysis.png', 
 plot=pl_analysis,
 width = 7,
 height = 3.5,

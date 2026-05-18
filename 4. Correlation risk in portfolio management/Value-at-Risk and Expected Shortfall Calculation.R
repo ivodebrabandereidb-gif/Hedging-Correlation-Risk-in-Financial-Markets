@@ -1,6 +1,6 @@
 #------------------------- General Purpose -------------------------
 # This file provides the results explained in section 1.2 of the thesis. 
-# Furthermore, it constructs figure 2. The exact parameter settings to get to the figures are explained in the thesis.
+# Furthermore, it constructs figure 1. The exact parameter settings to get to the figures are explained in the thesis.
 
 library(MASS)
 library(ggplot2)
@@ -274,7 +274,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
 # Save
 ggsave(
-  "Fig2_VaR_ES_Portfolios.png",
+  "Fig1_VaR_ES_Portfolios.png",
   plot = combined_plot,
   width = 8.5,
   height = 4.5,

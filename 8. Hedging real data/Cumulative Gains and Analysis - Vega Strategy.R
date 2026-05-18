@@ -1,7 +1,7 @@
 #------------------------- General Purpose -------------------------
-# This file is constructed to give insight in the results of the gamma trading strategy 
-# in accordance to what is written in the thesis in Chapter 6.2 .
-# Furthermore, it constructs figure 15 and Table 6 (data is printed throughout the script).
+# This file is constructed to give insight in the results of the vega trading strategy 
+# in accordance to what is written in the thesis in Chapter 6.3 .
+# Furthermore, it constructs figure 14 and Table 6 (data is printed throughout the script).
 
 #------------------------- !! Important !! -------------------------
 # To obtain the figures laid out in the thesis:
@@ -135,7 +135,7 @@ summary(capm_model)
 cat("Single index model: \n", "Alpha", capm_model$coefficients[1]*annualization_factor, "Beta", capm_model$coefficients[2])
 
 #-------------------------------
-# Step 5: Understanding results and building plots for figure 15.
+# Step 5: Understanding results and building plots for figure 14.
 #-------------------------------
 
 pl_maturity <- ggplot(df_PNL, aes(x = quote_date, y = cumsum(PNL_realized))) +
@@ -209,7 +209,7 @@ combined_plot
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
-ggsave('Figure15_Realmarketdata_analysis_vega.png', 
+ggsave('Figure14_Realmarketdata_analysis_vega.png', 
        plot=combined_plot,
        width = 6.5,
        height = 5,

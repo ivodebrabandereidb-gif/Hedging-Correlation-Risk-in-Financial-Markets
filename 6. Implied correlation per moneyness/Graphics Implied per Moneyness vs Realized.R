@@ -1,5 +1,5 @@
 #------------------------- General Purpose -------------------------
-# This file constructs figure 6 from the thesis, using the outputs: 
+# This file constructs figure 5 from the thesis, using the outputs: 
 #   `Implied correlation per moneyness_M<Mat> - ATM.csv` from Implied Correlation per Moneyness.R
 #   `Realized_Correlation_M<Mat>.csv` from Realized Correlation.R
 
@@ -114,6 +114,6 @@ top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(l
 print(top_row)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(paste0("Figures"))
-ggsave('Figure6_ATM_Implied_vs_realized_correlation_30_90.png', plot=top_row,  width = 6.5,
+ggsave('Figure5_ATM_Implied_vs_realized_correlation_30_90.png', plot=top_row,  width = 6.5,
        height = 5.25)
 

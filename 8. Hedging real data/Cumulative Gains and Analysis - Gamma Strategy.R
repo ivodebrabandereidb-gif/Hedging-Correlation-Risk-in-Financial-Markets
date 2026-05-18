@@ -1,15 +1,15 @@
 #------------------------- General Purpose -------------------------
 # This file is constructed to give insight in the results of the gamma trading strategy 
 # in accordance to what is written in the thesis in Chapter 6.2
-# Furthermore, it constructs figures 12, 13 and 14, and Tables 4 (data is printed throughout the script) and 5.
+# Furthermore, it constructs figures 11, 12 and 13, and Tables 4 (data is printed throughout the script) and 5.
 
 #------------------------- !! Important !! -------------------------
-# To obtain figures 12 and 13 in the thesis:
+# To obtain figures 11 and 12 in the thesis:
 # Run this script up to line  using,
 # maturity = 30 and 90,
 # delta = "delta"
 # When both maturities are in memory then run the last lines of the script.
-# Figure 14 and tables 4 and 5 are made in the same process.
+# Figure 13 and tables 4 and 5 are made in the same process.
 
 library(lubridate)
 library(ggplot2)
@@ -235,7 +235,7 @@ if(maturity==90)
 }
 
 #-------------------------------
-# Step 6: Settings figure 13.
+# Step 6: Settings figure 12.
 #-------------------------------
 
 pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
@@ -296,7 +296,7 @@ assign(
 print(get(paste0("pl_real_vs_theor_", maturity)))
 
 #-------------------------------
-# Step 6: Settings and saving figure 14: vega corrected realized vs index returns
+# Step 6: Settings and saving figure 13: vega corrected realized vs index returns
 #-------------------------------
 
 pl_capm_vega_corrected_maturity <- ggplot(df_CAPM, aes(x = RMe*100,y =100*(Re-(Re_theoretical_w_vega-Re_theoretical)))) +
@@ -355,10 +355,10 @@ pl_vega_maturity <- get(paste0("pl_real_vs_theor_vega_", maturity))+get(paste0("
 
 pl_vega_maturity
 
-#Save Plot for Figure 14.
+#Save Plot for Figure 13.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
-ggsave(paste0('Figure14_realmarket_analysis_gamma_vega_corrected_',maturity,'.png'), 
+ggsave(paste0('Figure13_realmarket_analysis_gamma_vega_corrected_',maturity,'.png'), 
        plot=pl_vega_maturity,
        width = 7,
        height = 3.5,
@@ -371,13 +371,13 @@ summary(CAPM_vega_corrected)
 confint(CAPM_vega_corrected, level = 0.95)
 
 #-------------------------------
-# Step 7: Settings and saving figure 12 and 13
+# Step 7: Settings and saving figure 11 and 12
 #-------------------------------
 
 top_row <- pl30/ pl90 + plot_layout(guides = "collect") & common_scale & theme(legend.position = "bottom")
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 top_row
-ggsave(paste0('Figures/Figure12_PNL_cummulative_',greek_hedge,'_',delta,'_30_90.png'), plot=top_row,  width = 6.5,height = 5.25)
+ggsave(paste0('Figures/Figure11_PNL_cummulative_',greek_hedge,'_',delta,'_30_90.png'), plot=top_row,  width = 6.5,height = 5.25)
 
 
 combined_plot <- ((pl_real_vs_theor_30+pl_capm_30)/ (pl_real_vs_theor_90+pl_capm_90)) + plot_annotation(tag_levels = 'a')
@@ -385,7 +385,7 @@ combined_plot <- ((pl_real_vs_theor_30+pl_capm_30)/ (pl_real_vs_theor_90+pl_capm
 # Display the result
 combined_plot
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-ggsave(paste0('Figures/Figure13_Scatter_Realized_daily_vs_',greek_hedge,'_',delta,'_PL.png'), 
+ggsave(paste0('Figures/Figure12_Scatter_Realized_daily_vs_',greek_hedge,'_',delta,'_PL.png'), 
        plot=combined_plot,
        width = 6.5,
        height = 5,
