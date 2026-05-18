@@ -49,13 +49,19 @@ pl_cor3m <- ggplot(df_clean, aes(x = date, y = close/100)) +
   # 50-day Moving Average
   geom_ma(ma_fun = SMA, n = 50, color = "#1FABD5", linetype = 1, linewidth = 0.5) +
   
-  theme_minimal()+ 
+  theme_minimal() +  
   theme(
-    panel.grid = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.grid.major = element_line(color = "gray90"),
+    
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.minor = element_blank(),
     axis.line = element_line(color = "black", linewidth = 0.7),
     axis.text = element_text(color = "black"),
-    axis.ticks = element_line(color = "black"),
+    axis.ticks = element_line(color = "black")
   )
+
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")
 ggsave('Fig2_COR3M.png', 
