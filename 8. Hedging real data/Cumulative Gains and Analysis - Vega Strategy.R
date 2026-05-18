@@ -1,11 +1,17 @@
 #------------------------- General Purpose -------------------------
+<<<<<<< HEAD
 # This file is constructed to give insight in the results of the vega trading strategy 
 # in accordance to what is written in the thesis in Chapter 6.3 .
 # Furthermore, it constructs figure 14 and Table 6 (data is printed throughout the script).
+=======
+# This file provides insights in the results of the trading strategy on the correlation risk premium 
+# in accordance to what is written in the thesis in Chapter 6.2 .
+# Furthermore, it constructs figure 15 and Table 6 (data is printed throughout the script).
+>>>>>>> bf6426041d8c86140bcef239a578454cb869a749
 
 #------------------------- !! Important !! -------------------------
 # To obtain the figures laid out in the thesis:
-# Run this script up to line  using,
+# Run this script up to line 197 using,
 # Maturity = 30 and 90,
 # delta = "delta"
 # When both maturities are in memory then run the last lines of the script.
@@ -22,7 +28,7 @@ library(tidyr)
 
 #To obtain the results from the thesis, maturity can be put to 30 days or 90 days.
 #We define maturity to target options with roughly the same maturity
-maturity = 90
+maturity = 30
 #Use this program only for the vega-hedged analysis, for the gamma-hedged analysis
 #Put equal to 'delta'.
 delta = "delta"
@@ -68,7 +74,7 @@ second_central_moment = mean((df_index$return-mean)^2)
 third_central_moment = mean((df_index$return-mean)^3)
 fourth_central_moment = mean((df_index$return-mean)^4)
 
-annualization_factor = n/3
+annualization_factor = n/3 #the total number of trading days divided by the number of years to arrive at the averge number of trading days in one year
 skew = third_central_moment/(sd^3)
 excess_kurtosis = fourth_central_moment/sd^4-3
 Sharpe_ratio = Excess_return*annualization_factor/(sd*sqrt(annualization_factor))
@@ -106,7 +112,7 @@ second_central_moment = mean((df_PNL$PNL_realized-mean)^2)
 third_central_moment = mean((df_PNL$PNL_realized-mean)^3)
 fourth_central_moment = mean((df_PNL$PNL_realized-mean)^4)
 
-annualization_factor = n/3 # We divide by 3 because we use three years.
+annualization_factor = n/3 #the total number of trading days divided by the number of years to arrive at the averge number of trading days in one year
 skew = third_central_moment/(sd^3)
 excess_kurtosis = fourth_central_moment/sd^4-3
 Sharpe_ratio = Excess_return*annualization_factor/(sd*sqrt(annualization_factor))
@@ -139,7 +145,6 @@ cat("Single index model: \n", "Alpha", capm_model$coefficients[1]*annualization_
 #-------------------------------
 
 pl_maturity <- ggplot(df_PNL, aes(x = quote_date, y = cumsum(PNL_realized))) +
-  # Hard-code color and linetype here since there is only one group
   geom_line(linewidth = 0.5, color = "#1FABD5", linetype = "solid") + 
   scale_x_date(
     limits = c(as.Date("2008-01-01"), as.Date("2010-12-31")),
@@ -178,7 +183,6 @@ pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
     y = "Trade excess return (%)",
     color = "Legend Title",
     linetype = "Legend Title"  )+
-  # 50-day Simple Moving Average
   
   theme_minimal() +
   theme(panel.grid.minor = element_blank())+
@@ -187,7 +191,7 @@ pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )+theme(
-    axis.title.x = element_text(margin = margin(t = -15)) # 't' is top margin
+    axis.title.x = element_text(margin = margin(t = -15))
   )
 
 assign(
@@ -213,8 +217,8 @@ ggsave('Figure14_Realmarketdata_analysis_vega.png',
        plot=combined_plot,
        width = 6.5,
        height = 5,
-       units = "in",   # Always specify inches
-       dpi = 300       # High resolution for printing
+       units = "in", 
+       dpi = 300     
 )
 
 #------------------------- 
