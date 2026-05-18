@@ -1,10 +1,22 @@
 # Hedging-Correlation-Risk-in-Financial-Markets
-This repository is made as a central location where the code can be found to recreate the results for the thesis 'Hedging Correlation Risk in Financial Markets', by Bram Verjans and Ivo De Brabandere
+This repository is made as a central location where the code is stored to recreate the results and analyses for the thesis 'Hedging Correlation Risk in Financial Markets', by Bram Verjans and Ivo De Brabandere
 
-## Overview chapters
+## Overview Chapters from the Thesis and Accompanying R-Scripts
 
+| Chapter | R-Script | Comment |
+|---|---|---|
+| 1. Literature study | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
+| 2. Preliminaries | `Realized Correlation.R` | Computes realized correlations as explained in section 2.3.1 |
+| 2. Preliminaries  | `Model-Free Implied Correlation.R` | Performs the analysis in Section 1.2 |
+| 1. Literature study  | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
+| 1. Literature study  | `Value-at-Risk and Expected Shortfall Calculation.R` | Performs the analysis in Section 1.2 |
 
 ## General Workflow
+This section serves as an optimal order to run all R-scripts.
+when running an R-script, make sure that the necessary input is available.
+A general rule is that `.csv`-files are stored in the Data folder contained in the same folder as the R-script that outputs it.
+`.png`-files can be found in the Figures folder.
+
 ### 1. '1. Package installer / Package Installer.R'
 #### Purpose
 Installs the necessary packages for all upcoming R-files.
