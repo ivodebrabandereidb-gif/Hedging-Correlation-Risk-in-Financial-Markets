@@ -1,5 +1,5 @@
 # Hedging-Correlation-Risk-in-Financial-Markets
-This repository is made as a central location where the code is stored to recreate the results and analyses for the thesis 'Hedging Correlation Risk in Financial Markets', by Bram Verjans and Ivo De Brabandere
+This repository is made as a central location where the code is stored to recreate the results and analyses for the thesis 'Hedging Correlation Risk in Financial Markets', by Bram Verjans and Ivo De Brabandere.
 
 ## Overview Chapters from the Thesis and Accompanying R-Scripts
 
