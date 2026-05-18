@@ -32,14 +32,12 @@ pl_index <- ggplot(df_index, aes(x  = quote_date, y = price_index)) +
   scale_x_date(
     limits = c(as.Date("2008-01-01"), as.Date("2010-12-31")),
     breaks = seq(as.Date("2008-01-01"), as.Date("2010-12-31"), by = "6 months"),
-    #Format of values on x-axis
     date_labels = "%b/%y",
-    #Ensure the line touches the edges of the plot
     expand = c(0, 0) 
   ) +
   labs( x = NULL)+
   scale_colour_gradientn(colours = c("#1FABD5", "#00407A")) +
-   ylab(expression("Index value")) +theme_minimal() +theme(aspect.ratio=0.66,legend.position = "none")+  theme(
+   ylab(expression("Index value")) +theme_minimal() +  theme(
     axis.line = element_line(color = "black", linewidth = 0.7),
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
