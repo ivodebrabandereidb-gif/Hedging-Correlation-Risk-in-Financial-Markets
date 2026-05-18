@@ -279,6 +279,8 @@ df_heatmap <- df_MFIV_full %>%
 
 
 # Plot using the scaled error
+
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_heatmap <- ggplot(df_heatmap, aes(x = quote_date, y = as.factor(security_ID), fill = error_scaled)) +
   geom_tile() +
   scale_fill_gradient(low = "#1FABD5", 
@@ -298,6 +300,8 @@ pl_heatmap <- ggplot(df_heatmap, aes(x = quote_date, y = as.factor(security_ID),
     # Keeps your axis text settings
     axis.text.y = element_text(size = 5)
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
+
 print(pl_heatmap)
 
 

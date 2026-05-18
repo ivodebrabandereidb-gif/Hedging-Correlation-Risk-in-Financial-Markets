@@ -139,6 +139,7 @@ cat("Single index model: \n", "Alpha", capm_model$coefficients[1]*annualization_
 # Step 5: Understanding results and building plots for figure 14.
 #-------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_maturity <- ggplot(df_PNL, aes(x = quote_date, y = cumsum(PNL_realized))) +
   geom_line(linewidth = 0.5, color = "#1FABD5", linetype = "solid") + 
   scale_x_date(
@@ -166,10 +167,11 @@ assign(
   paste0("pl_", maturity),
   pl_maturity
 )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 print(get(paste0("pl_", maturity)))
 
-
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A", size = 1) +
   scale_y_continuous(expand = c(0, 0), breaks  = seq(-60,20,20), limits = c(-60, 20))+
@@ -188,6 +190,7 @@ pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
   )+theme(
     axis.title.x = element_text(margin = margin(t = -15))
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl_capm_", maturity),

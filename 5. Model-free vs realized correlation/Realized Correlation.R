@@ -109,6 +109,7 @@ write.table(realized_cor, output_name, row.names = FALSE,sep=";",dec=",")
 #Extra: Plot of the realized correlation trend
 #-------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 ggplot(realized_cor, aes(x = quote_date, y = realized_cor)) +
    geom_line(color = "#00407A", size = 1) +  # Blue line for trend
  
@@ -119,6 +120,6 @@ ggplot(realized_cor, aes(x = quote_date, y = realized_cor)) +
      y = "Realized Correlation"
    ) +
    theme_minimal()
-
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
   

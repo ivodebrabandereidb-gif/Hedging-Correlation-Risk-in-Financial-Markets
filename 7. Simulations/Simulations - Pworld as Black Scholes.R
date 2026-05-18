@@ -356,6 +356,7 @@ df_scatter_plot <- df_tot_PNL %>%
 # Preparing figure 9.
 #--------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_cummul <- ggplot(df_scatter_plot, aes(x = diff_impl_real_cov, y = cumulative_PNL)) +
   geom_point(alpha = 0.5, color = "#00407A", size = 0.15) + 
   labs(
@@ -370,6 +371,7 @@ pl_cummul <- ggplot(df_scatter_plot, aes(x = diff_impl_real_cov, y = cumulative_
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 plot_time <- paste0("pl_evol_",optiontype, d)
 plot_cumul <- paste0("pl_scatter_",optiontype, d)
@@ -473,7 +475,7 @@ summary(capm_model)
 #-------------------------
 # Prepare for figure 10.
 #-------------------------
-
+# ------- The following piece of code to plot the graphs was generated using Gemini (Google, 2026) -------
 pl_capm <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A", size = 0.2) +
   scale_y_continuous(breaks = c(-0.75,-0.5,-0.25, 0,0.25),limits = c(-0.75, 0.25),expand = c(0, 0)
@@ -511,6 +513,8 @@ pl_real_vs_theor <- ggplot(df_PNL, aes(x = PNL_theoretical*100, y = PNL_realized
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graphs was generated using Gemini (Google, 2026) -------
+
 
 pl_analysis <- (pl_real_vs_theor + pl_capm)
 

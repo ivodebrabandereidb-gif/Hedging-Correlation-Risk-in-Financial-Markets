@@ -138,6 +138,7 @@ cat("Single index model: \n", "Alpha", capm_model$coefficients[1]*annualization_
 # Step 4: Preparing correct settings for figure 11.
 #-------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 Sys.setlocale("LC_TIME", "English")
 plmaturity <- ggplot(df_PNL_one_column, aes(x = quote_date, y = PNL, color = as.factor(ID), group = ID,linetype = as.factor(ID))) +
   geom_line(linewidth = 0.5) + 
@@ -186,6 +187,7 @@ common_scale <- list(scale_color_manual(
     labels = c("2" = "Gamma P&L", "1" = "Realized P&L")
   )
 )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl", maturity),
@@ -240,6 +242,7 @@ if(maturity==90)
 # Step 6: Settings figure 12.
 #-------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   scale_y_continuous(expand = c(0, 0), breaks = ybreaks, limits = ylimits)+
@@ -257,6 +260,7 @@ pl_capm_maturity <- ggplot(df_CAPM, aes(x = RMe*100, y =Re*100)) +
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl_capm_", maturity),
@@ -269,7 +273,7 @@ print(get(paste0("pl_capm_", maturity)))
 Re_against_Retheor <-lm(Re ~ Re_theoretical, data = df_CAPM)
 summary(Re_against_Retheor)
 
-
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_real_vs_theor_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical*100, y = Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   geom_abline(intercept = Re_against_Retheor$coefficients[1] , slope = Re_against_Retheor$coefficients[2], color = "#DD8A2E", linetype = "21", linewidth = 0.78) +
@@ -289,6 +293,7 @@ pl_real_vs_theor_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical*100, y = Re*
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl_real_vs_theor_", maturity),
@@ -301,6 +306,7 @@ print(get(paste0("pl_real_vs_theor_", maturity)))
 # Step 6: Settings and saving figure 13: vega corrected realized vs index returns
 #-------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_capm_vega_corrected_maturity <- ggplot(df_CAPM, aes(x = RMe*100,y =100*(Re-(Re_theoretical_w_vega-Re_theoretical)))) +
   geom_point(alpha = 0.5, color = "#00407A") +
   scale_y_continuous(expand = c(0, 0))+
@@ -319,6 +325,7 @@ pl_capm_vega_corrected_maturity <- ggplot(df_CAPM, aes(x = RMe*100,y =100*(Re-(R
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl_capm_vega_corrected_", maturity),
@@ -328,6 +335,7 @@ assign(
 Re_against_Retheor_vega <- lm(Re ~ Re_theoretical_w_vega, data = df_CAPM)
 summary(Re_against_Retheor_vega)
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_real_vs_theor_vega_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*100, y = Re*100)) +
   geom_point(alpha = 0.5, color = "#00407A") +
   geom_abline(intercept = Re_against_Retheor_vega$coefficients[1] , slope = Re_against_Retheor_vega$coefficients[2], color = "#DD8A2E", linetype = "21", linewidth = 0.78) +
@@ -347,6 +355,7 @@ pl_real_vs_theor_vega_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 assign(
   paste0("pl_real_vs_theor_vega_", maturity),

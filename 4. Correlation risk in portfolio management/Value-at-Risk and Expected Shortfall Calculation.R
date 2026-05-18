@@ -156,6 +156,8 @@ plot_data_es <- results_ES_df %>%
 #Figure settings and plotting.
 #-------------------------------
 
+# ------- The following piece of code to plot the graphs was generated using Gemini (Google, 2026) -------
+
 # Common y-axis limits
 y_min <- min(c(plot_data_var$Value, plot_data_es$Value,0), na.rm = TRUE)
 y_max <- max(c(plot_data_var$Value, plot_data_es$Value), na.rm = TRUE)
@@ -180,7 +182,7 @@ my_linetypes <- c(
   "Hedged by worst-of put option" = "solid"
 )
 
-# VaR plot
+# VaR plot, 
 pl_var <- ggplot(
   plot_data_var,
   aes(x = rho, y = Value, color = ID, group = ID, linetype = ID)
@@ -251,6 +253,8 @@ pl_var_ES <- ggplot(
     legend.position = "bottom",
     legend.title = element_blank()
   )
+
+# ------- The previous piece of code to plot the graphs was generated using Gemini (Google, 2026) -------
 
 # Combine plots
 combined_plot <- pl_var + pl_var_ES +

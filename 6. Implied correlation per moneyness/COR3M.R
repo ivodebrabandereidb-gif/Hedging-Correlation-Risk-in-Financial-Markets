@@ -29,6 +29,7 @@ df_clean <- df %>%
     low   = as.numeric(low)
   )
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_cor3m <- ggplot(df_clean, aes(x = date, y = close/100)) +
  scale_x_date(
     limits = c(as.Date("2006-01-03"), as.Date("2026-07-31")),
@@ -61,6 +62,8 @@ pl_cor3m <- ggplot(df_clean, aes(x = date, y = close/100)) +
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black")
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
+
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd("Figures")

@@ -25,8 +25,12 @@ df_index <- weights %>%
   filter(quote_date >= '2008-01-01' & quote_date <= '2010-12-31') %>%
   group_by(quote_date) %>%
   summarize(price_index = sum(weights*close_price), .groups = "drop") 
-  
-  
+
+#-------------------------------
+# Step 1: Plotting the graph
+#-------------------------------
+
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------  
 pl_index <- ggplot(df_index, aes(x  = quote_date, y = price_index)) + 
   geom_line(linewidth = 0.5, colour = "#1FABD5", linetype = "solid") +
   scale_x_date(
@@ -49,6 +53,11 @@ pl_index <- ggplot(df_index, aes(x  = quote_date, y = price_index)) +
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black")
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
+
+#-------------------------------
+# Step 2: Saving the graph
+#-------------------------------
 
 print(pl_index)
 setwd("Figures")

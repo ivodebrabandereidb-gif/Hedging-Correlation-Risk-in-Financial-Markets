@@ -210,6 +210,7 @@ df_general_trend_plot <- df_implied_correlations %>%
 legend_breaks <- as.numeric(as.Date(c("2008-01-01", "2009-01-01", "2010-01-01")))
 legend_limits <- as.numeric(as.Date(c("2008-01-01", "2010-12-31")))
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl2 <- ggplot(df_general_trend_plot, 
               aes(x = moneyness_grid, 
                   y = rho_iv, 
@@ -235,6 +236,7 @@ pl2 <- ggplot(df_general_trend_plot,
     legend.position = "right",
     panel.grid.minor = element_blank()
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 print(pl2)
 
@@ -256,7 +258,7 @@ ggsave(file_name,
 #--------------------------------------------
 df_rho_skew_date <- df_implied_correlations %>% filter(quote_date == as.Date('2008-07-21'))
 
-
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 pl_cor3m <- ggplot(df_rho_skew_date, aes(x = moneyness_grid, y = rho_iv)) +
   scale_y_continuous(
     limits = c(0, 1), 
@@ -278,6 +280,7 @@ pl_cor3m <- ggplot(df_rho_skew_date, aes(x = moneyness_grid, y = rho_iv)) +
     axis.text = element_text(color = "black"),
     axis.ticks = element_line(color = "black"),
   )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 print(pl_cor3m)
 #--------------------------------------------
@@ -295,6 +298,7 @@ write.table(df_rhoIV_ATM, output_name, row.names = FALSE,sep=";",dec=",")
 # Extra: plot of the implied correlation over time
 #--------------------------------------------
 
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 ggplot(df_rhoIV_ATM, aes(x = quote_date)) +
   # Realized P&L Line
   geom_line(aes(y = rho_iv, color = "Implied Correlation"), linewidth = 0.5) +
@@ -305,3 +309,4 @@ ggplot(df_rhoIV_ATM, aes(x = quote_date)) +
     color = "Type"
   ) +
   theme_minimal()
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------

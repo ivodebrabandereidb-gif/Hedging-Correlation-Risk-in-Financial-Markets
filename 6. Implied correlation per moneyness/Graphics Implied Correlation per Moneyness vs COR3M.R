@@ -67,7 +67,7 @@ plot_data <- rbind(df_implied_cor,df_cor3m)
 plot_data$quote_date <- as.Date(plot_data$quote_date)
 plot_data <- plot_data %>% arrange(ID,quote_date)
 
-
+# ------- The following piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 Sys.setlocale("LC_TIME", "English")
 plmaturity <- ggplot(plot_data, aes(x = quote_date, y = correlation, color = ID, group = ID,linetype = ID)) +
   geom_line(linewidth = 0.5) + 
@@ -112,6 +112,7 @@ common_scale <- list(scale_color_manual(
     labels = c("1" = "ATM implied correlation (90-Day window)", "2" = "COR3M Index")
   )
 )
+# ------- The previous piece of code to plot the graph was generated using Gemini (Google, 2026) -------
 
 #------------------------- 
 #Plotting for the given maturity (M)
