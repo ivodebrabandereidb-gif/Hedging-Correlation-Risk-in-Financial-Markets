@@ -1,6 +1,6 @@
 #------------------------- General Purpose -------------------------
 # This program takes the data on the stock prices composing the index and computes the index price per date.
-# With this information, Figure 3 is created plotting the price of the index over time
+# With this information, Figure 3 is created plotting the price of the index over time.
 
 library(lubridate)
 library(ggplot2)

@@ -20,7 +20,7 @@ library(patchwork)
 #------------------------- 
 #Input: Change maturity to either 30 or 90 days to obtain the results from the paper.
 #-------------------------
-maturity = 90
+maturity = 30
 
 #------------------------- 
 #Data Loader: Load the calculated implied and realized correlations, 
@@ -109,7 +109,6 @@ assign(
   paste0("pl", maturity),
   plmaturity
 )
-
 print(get(paste0("pl", maturity)))
 
 #------------------------- 

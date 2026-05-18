@@ -1,3 +1,8 @@
+#------------------------- General Purpose -------------------------
+# Loads and combines the raw option data, zero-coupon bond data, and portfolio weights for 2008–2010. 
+# This file is intended to be sourced by other scripts and is not meant to be executed as a standalone.
+
+
 data = NULL
 zcb = NULL
 

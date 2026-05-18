@@ -17,7 +17,7 @@ library(patchwork)
 #Input: Maturity = 90 is used in the thesis. The COR3M index is a measure of implied correlations over 90 days.
 #-------------------------
 
-maturity = 90
+maturity = 30
 
 #------------------------- 
 #Data Loader: Load the calculated implied correlations, 

@@ -1,3 +1,7 @@
+#------------------------- General Purpose -------------------------
+# Constructs the sticky-delta implied volatility slope measure by cleaning the option dataset, removing duplicate option observations, 
+# and computing implied volatility slopes across strike prices.
+# This file is intended to be sourced by other scripts and is not meant to be executed as a standalone.
 
 #OTM-options
 data_cleaned_sticky_delta = data[data["open_interest"]>0 & data["best_bid"]>0 & (data["delta"]< 0.5 & data["delta"]>-0.5),]

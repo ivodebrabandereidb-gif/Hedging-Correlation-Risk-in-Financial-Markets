@@ -1,7 +1,33 @@
 # Hedging-Correlation-Risk-in-Financial-Markets
 This repository is made as a central location where the code is stored to recreate the results and analyses for the thesis 'Hedging Correlation Risk in Financial Markets', by Bram Verjans and Ivo De Brabandere.
+The thesis was submitted during academic year 2025-2026 to the Katholieke Universiteit Leuven to obtain the degree of Master Actuarial and Financial Engineering.
+
+## Data policy
+
+Due to the price associated to a dataset containing option prices, delta's etc..., for multiple assets and the index, the decision was made not to make the dataset and any intermediate output with extension `.csv` available through the GitHub repository. Output using the extension `.png` are available through the GitHub repository.
+Before starting, the dataset will have to be manually put into the following folders: 
+- `2. Raw option data / 2008`,
+- `2. Raw option data / 2009`,
+- `2. Raw option data / 2010`.
+More information on the type and format of data that should be stored in the folders above, can be found in separate `ReadMe` files inside these folders. To be able to guarantee that everything runs smoothly, it is important to keep the data format, names of columns and files etc... as is.
+When the correct data is stored in these folders, it will be possible to compute the intermediate output files.
+
+## Versions
+
+- R: "4.5.0"
+- package "lubridate": "1.9.5"
+- package "ggplot2": "4.0.3"
+- package "dplyr": "1.2.1" 
+- package "jsonlite": "2.0.0"
+- package "patchwork": "1.3.2"
+- package "rstudioapi": "0.18.0"
+- package "tidyr": "1.3.2"
+- package "tidyquant": "1.0.12"
+- package "MASS": "7.3-65"
+- package "scales": "1.4.0"
 
 ## Overview Chapters from the Thesis and Accompanying R-Scripts
+The following table gives an overview of the chapters from the thesis and the applicable R-scripts accompanying those chapters.
 
 | Chapter | R-Script | Comment |
 |---|---|---|
@@ -21,7 +47,7 @@ This repository is made as a central location where the code is stored to recrea
 
 ## General Workflow
 This section serves as an optimal order to run all R-scripts.
-when running an R-script, make sure that the necessary input is available.
+When running an R-script, make sure that the necessary input is available.
 A general rule is that `.csv`-files are stored in the Data folder contained in the same folder as the R-script that outputs it.
 `.png`-files can be found in the Figures folder.
 
@@ -33,7 +59,7 @@ Installs the necessary packages for all upcoming R-files.
 
 #### Purpose
 Loads and combines the raw option data, zero-coupon bond data, and portfolio weights for 2008–2010. 
-This file is intended to be sourced by other scripts and is not executed standalone.
+This file is intended to be sourced by other scripts and and is not meant to be executed as a standalone.
 
 #### Inputs
 - `optdata_<YYYY>_<M>.csv`
@@ -63,10 +89,11 @@ Furthermore, it constructs figure 1.
 
 #### Purpose
 
-- The option data loaded using the `Loading Data.R`.
+This program takes the data on the stock prices composing the index and computes the index price per date.
+With this information, Figure 3 is created plotting the price of the index over time.
 
 #### Inputs
-- The weights given in `weights_<YYYY>.csv` in `2. Raw option data`.
+- The option data loaded using the `Loading Data.R`.
 
 #### Outputs
 - `Fig3_Price_Level_DJIA.png`
@@ -76,7 +103,7 @@ Furthermore, it constructs figure 1.
 
 #### Purpose
 
-This file computes the realized correlation (RC) as is explained in section 2.3.1 of the thesis.
+This file computes the realized correlation (RC) as is explained in section 2.3.1 of the thesis using the implementation of Section 3.3.1.
 
 #### Inputs
 - The weights given in `weights_<YYYY>.csv` in `2. Raw option data`.
@@ -89,7 +116,7 @@ with `<Mat>` depicting the maturity specified.
 
 #### Purpose
 
-This file computes the model-free implied correlation (MFIC) as is shown in section 2.3.2 of the thesis.
+This file computes the model-free implied correlation (MFIC) as is explained in section 2.3.2 of the thesis using the implementation of Section 3.3.1.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
@@ -127,7 +154,7 @@ This file constructs figure 2 from the thesis.
 
 #### Purpose
 
-This file computes the implied correlation over moneyness levels to support section 3.3.2 of the thesis.
+This file computes the implied correlation over moneyness levels and produces Figure 7, as is explained in section 2.3.3 of the thesis using the implementation of Section 3.3.1.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
@@ -182,7 +209,7 @@ This file supports the analysis from Chapter 5 in the thesis. .
 
 
 Constructs the sticky-delta implied volatility slope measure by cleaning the option dataset, removing duplicate option observations, and computing implied volatility slopes across strike prices.
-This file is intended to be sourced by other scripts and is not executed standalone.
+This file is intended to be sourced by other scripts and is not meant to be executed as a standalone.
 
 #### Inputs
 - A dataset called `data`
@@ -191,13 +218,12 @@ This file is intended to be sourced by other scripts and is not executed standal
 #### Outputs
 - A dataset called `df_iv_slope`
 
-
-
 ### 14. '8. Hedging real data / Cleaning Data and Synthesizing Option Type.R'
 
 #### Purpose
 
-computing the P&L of a delta-hedging strategy.
+This program applies the option dispersion trades discussed in Chapter 4 to the empirical dataset.
+This program is the basis for all the figures and empirical results in Chapter 6.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
@@ -210,7 +236,8 @@ computing the P&L of a delta-hedging strategy.
 
 #### Purpose
 
-This file is constructed to give insight in the results of the gamma trading strategy in accordance to what is written in the thesis in Chapter 6.2
+This file provides insights in the results of the trading strategy on the correlation gap in accordance to what is written in the thesis in Chapter 6.2
+Furthermore, it constructs figures 11, 12 and 13, and Tables 4 and 5.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
@@ -225,7 +252,8 @@ This file is constructed to give insight in the results of the gamma trading str
 
 #### Purpose
 
-This file is constructed to give insight in the results of the vega trading strategy in accordance to what is written in the thesis in Chapter 6.3 .
+This file provides insights in the results of the trading strategy on the correlation risk premium in accordance to what is written in the thesis in Chapter 6.3.
+Furthermore, it constructs figure 14 and Table 6.
 
 #### Inputs
 - The option data loaded using the `Loading Data.R`.
