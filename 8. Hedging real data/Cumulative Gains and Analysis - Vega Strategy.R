@@ -1,7 +1,7 @@
 #------------------------- General Purpose -------------------------
 
 # This file provides insights in the results of the trading strategy on the correlation risk premium 
-# in accordance to what is written in the thesis in Chapter 6.3 .
+# in accordance to what is written in the thesis in Chapter 6.3.
 # Furthermore, it constructs figure 14 and Table 6 (data is printed throughout the script).
 
 #------------------------- !! Important !! -------------------------
