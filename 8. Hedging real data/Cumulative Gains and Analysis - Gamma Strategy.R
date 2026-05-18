@@ -334,7 +334,7 @@ pl_real_vs_theor_vega_maturity <- ggplot(df_CAPM, aes(x = Re_theoretical_w_vega*
   scale_y_continuous(expand = c(0, 0), breaks=seq(-60,20,20), limits =c(-60,20))+
   scale_x_continuous(expand = c(0, 0),breaks=seq(-80,20,20),limits = c(-80,20))+
   labs(
-    x = "Gamma + vega P&L (%)",
+    x = "Gamma-vega P&L (%)",
     y = "Realized P&L (%)",
     color = "Legend Title",
     linetype = "Legend Title"  )+
